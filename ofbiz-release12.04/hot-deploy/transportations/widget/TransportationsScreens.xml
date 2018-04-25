@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+	<screen name="main">
+		<section>
+			<actions>
+				<set field="headerItem" value="main" /><!-- this highlights the selected 
+					menu-item with name "main" -->
+			</actions>
+			<widgets>
+
+				<decorator-screen name="transportations-global-decorator"
+					location="component://transportations/widget/CommonScreens.xml">
+					<decorator-section name="body">
+
+						<platform-specific>
+							<html>
+								<html-template
+									location="component://transportations/webapp/transportations/TransportationMain.ftl" />
+							</html>
+						</platform-specific>
+
+					</decorator-section>
+				</decorator-screen>
+
+
+			</widgets>
+		</section>
+	</screen>
+	
+	<screen name="VehicleSchedulingForDeliverying">
+		<section>
+			<actions>
+				
+				<property-map resource="TransportationsUiLabels.xml" map-name="uiLabel" global="true"/>
+				
+				<service service-name="getWarehouses" result-map="resultWarehouses">
+				</service>
+				
+			</actions>
+			<widgets>
+				<decorator-screen name="transportations-global-decorator"
+					location="component://transportations/widget/CommonScreens.xml">
+					<decorator-section name="body">
+
+						<platform-specific>
+							<html>
+								<html-template location="component://transportations/webapp/transportations/vehicleschedulingfordeliverying/vehicle-scheduling-for-deliverying.ftl" />
+							<!-- 
+								<html-template location="component://transportations/webapp/transportations/vehicleschedulingfordeliverying/forms.ftl" />
+							 -->
+							</html>
+						</platform-specific>
+
+					</decorator-section>
+				</decorator-screen>
+			</widgets>
+		</section>
+	</screen>
+	
+
+	<screen name="pageCreateSecurityGroup">
+		<section>
+			<actions>
+				
+				<property-map resource="BkEunivUiLabels" map-name="bkEunivUiLabelMap" global="true"/>
+				<service service-name="getListSecurityGroups" result-map="result"></service>
+			</actions>
+			<widgets>
+				<decorator-screen name="transportations-global-decorator"
+					location="component://transportations/widget/CommonScreens.xml">
+					<decorator-section name="body">
+
+						<platform-specific>
+							<html>
+								<html-template
+									location="component://transportations/webapp/transportations/permission/create-security-group.ftl" />
+							</html>
+						</platform-specific>
+
+					</decorator-section>
+				</decorator-screen>
+			</widgets>
+		</section>
+	</screen>
+
+	<screen name="pageFormCreateSecurityGroup">
+		<section>
+			<actions>
+				<property-map resource="BkEunivPermissionUiLabels" map-name="bkEunivPermissionUiLabelMap" global="true"/>
+				<property-map resource="BkEunivUiLabels" map-name="bkEunivUiLabelMap" global="true"/>
+				
+			</actions>
+			<widgets>
+				<decorator-screen name="transportations-global-decorator"
+					location="component://transportations/widget/CommonScreens.xml">
+					<decorator-section name="body">
+
+						<platform-specific>
+							<html>
+								<html-template
+									location="component://transportations/webapp/transportations/permission/form-create-security-group.ftl" />
+							</html>
+						</platform-specific>
+
+					</decorator-section>
+				</decorator-screen>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="pageEnableSecurityGroupFunction">
+		<section>
+			<actions>
+				
+				<property-map resource="BkEunivUiLabels" map-name="bkEunivUiLabelMap" global="true"/>
+				<service service-name="getListSecurityGroups" result-map="securityGroup"></service>
+				<service service-name="getListFunctions" result-map="resultFunctions"> </service>
+			</actions>
+			<widgets>
+				<decorator-screen name="transportations-global-decorator"
+					location="component://transportations/widget/CommonScreens.xml">
+					<decorator-section name="body">
+
+						<platform-specific>
+							<html>
+								<html-template
+									location="component://transportations/webapp/transportations/permission/enable-security-group-function.ftl" />
+							</html>
+						</platform-specific>
+
+					</decorator-section>
+				</decorator-screen>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="pageViewUser">
+		<section>
+			<actions>
+				
+				<property-map resource="BkEunivUiLabels" map-name="bkEunivUiLabelMap" global="true"/>
+				<property-map resource="BkEunivStaffManagementUiLabels" map-name="staffManagementUiLabelMap" global="true"/>
+				<service service-name="getStaffInfo" result-map="staff"></service>
+				
+			</actions>
+			<widgets>
+				<decorator-screen name="transportations-global-decorator"
+					location="component://transportations/widget/CommonScreens.xml">
+					<decorator-section name="body">
+
+						<platform-specific>
+							<html>
+								<html-template
+									location="component://transportations/webapp/transportations/permission/user-info.ftl" />
+							</html>
+						</platform-specific>
+
+					</decorator-section>
+				</decorator-screen>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="pageEnableSecurityGroupUser">
+		<section>
+			<actions>
+				
+				<property-map resource="BkEunivUiLabels" map-name="bkEunivUiLabelMap" global="true"/>
+				<service service-name="getListSecurityGroups" result-map="securityGroup"></service>
+				<!-- <service service-name="getStaffs" result-map="resultStaffs"> </service> -->
+			</actions>
+			<widgets>
+				<decorator-screen name="transportations-global-decorator"
+					location="component://transportations/widget/CommonScreens.xml">
+					<decorator-section name="body">
+
+						<platform-specific>
+							<html>
+								<html-template
+									location="component://transportations/webapp/transportations/permission/enable-security-group-user.ftl" />
+							</html>
+						</platform-specific>
+
+					</decorator-section>
+				</decorator-screen>
+			</widgets>
+		</section>
+	</screen>
+
+	<screen name="pageRoutesView">
+		<section>
+			<actions>
+				<!-- 
+				<property-map resource="LearningUiLabels" map-name="uiLearningMap"
+					global="true" />
+				 -->	
+				<entity-condition list="listRoutes" entity-name="RouteAndShipper"></entity-condition>
+				<entity-condition list="listShippers" entity-name="Shippers"></entity-condition>
+			</actions>
+			<widgets>
+				<decorator-screen name="transportation-global-decorator"
+					location="component://transportations/widget/CommonScreens.xml">
+					<decorator-section name="body">
+
+						<platform-specific>
+							<html>
+								<html-template
+									location="component://transportations/webapp/transportations/routes/routes-list.ftl" />
+							</html>
+						</platform-specific>
+					</decorator-section>
+				</decorator-screen>
+
+
+
+
+			</widgets>
+		</section>
+	</screen>
+
+	<screen name="pageUploadFile">
+		<section>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://transportations/webapp/transportations/routes/upload-file.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+
+	<screen name="pageGoogleMaps">
+		<section>
+			<widgets>
+				<decorator-screen name="transportation-global-decorator"
+					location="component://transportations/widget/CommonScreens.xml">
+					<decorator-section name="body">
+
+						<platform-specific>
+							<html>
+								<html-template
+									location="component://transportations/webapp/transportations/routes/google-maps.ftl" />
+							</html>
+						</platform-specific>
+					</decorator-section>
+				</decorator-screen>
+
+
+			</widgets>
+		</section>
+	</screen>
+
+
+	<screen name="pageRoutesPDF">
+		<section>
+			<actions>
+				<entity-condition list="listRoutes" entity-name="RouteAndShipper"></entity-condition>
+			</actions>
+			<widgets>
+				<decorator-screen name="FoReportDecorator"
+					location="component://transportations/widget/CommonScreens.xml">
+					<!-- at the top left of every page we put the logo and company information -->
+					<decorator-section name="topLeft">
+						<section>
+							<widgets>
+								<include-screen name="CompanyLogo"
+									location="component://order/widget/ordermgr/OrderPrintScreens.xml" />
+							</widgets>
+						</section>
+					</decorator-section>
+					<decorator-section name="body">
+						<section>
+							<widgets>
+								<platform-specific>
+									<xsl-fo>
+										<html-template
+											location="component://transportations/webapp/transportations/routes/routes-list.fo.ftl" />
+									</xsl-fo>
+								</platform-specific>
+							</widgets>
+						</section>
+					</decorator-section>
+				</decorator-screen>
+
+
+			</widgets>
+		</section>
+	</screen>
+
+</screens>

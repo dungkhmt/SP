@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
+	<!-- The controller elements that are common to all OFBiz components can 
+		be found in the following xml file. A component can override the elements 
+		found in the common-controller.xml file. -->
+	<include location="component://common/webcommon/WEB-INF/common-controller.xml" />
+
+	<description>Slp Component Site Configuration File</description>
+
+	<!-- Events to run on every request before security (chains exempt) -->
+	<!-- <preprocessor> </preprocessor> -->
+	<!-- Events to run on every request after all other processing (chains exempt) -->
+	<!-- <postprocessor> <event name="test" type="java" path="org.ofbiz.webapp.event.TestEvent" 
+		invoke="test"/> </postprocessor> -->
+
+	<!-- Request Mappings -->
+	<request-map uri="main">
+		<security https="true" auth="true" />
+		<response name="success" type="request-redirect" value="tspd" />
+	</request-map>
+	<request-map uri="tspd">
+		<security https="true" auth="true" />
+		<response name="success" type="view" value="tspdhome" />
+	</request-map>
+
+	<request-map uri="tspd-solve">
+		<security https="true" auth="true" />
+		<response name="success" type="view" value="tspdsolution" />
+	</request-map>
+
+	<request-map uri="tspkd-solve">
+		<security https="true" auth="true" />
+		<response name="success" type="view" value="tspkdsolution" />
+	</request-map>
+
+	<request-map uri="tspd-select-module">
+		<security https="true" auth="true" />
+		<event type="service" invoke="storeData2Solve"></event>
+		<response name="success" type="view" value="tspdselectmodule" />
+	</request-map>
+
+	<request-map uri="tspd-get-route-a-drone">
+		<security https="false" auth="false" />
+		<event type="service" invoke="tspdsolve"></event>
+		<response name="success" type="request" value="json"></response>
+		<response name="error" type="request" value="json"></response>
+	</request-map>
+
+	<request-map uri="tspd-get-route-k-drone">
+		<security https="false" auth="false" />
+		<event type="service" invoke="tspkdsolve"></event>
+		<response name="success" type="request" value="json"></response>
+		<response name="error" type="request" value="json"></response>
+	</request-map>
+	
+	<request-map uri="tspd-get-route-k-drone-datasetid">
+		<security https="false" auth="false" />
+		<event type="service" invoke="tspkdsolve-datasetid"></event>
+		<response name="success" type="request" value="json"></response>
+		<response name="error" type="request" value="json"></response>
+	</request-map>
+	
+	<request-map uri="tspd-solve-ls">
+		<security https="true" auth="true" />
+		<response name="success" type="view" value="tspkdsolutionls" />
+	</request-map>
+	
+	<request-map uri="cvrp">
+		<security https="true" auth="true" />
+		<response name="success" type="view" value="view-cvrp" />
+	</request-map>
+
+	<request-map uri="vrp3d">
+		<security https="true" auth="true" />
+		<response name="success" type="view" value="uploadvrp3d" />
+	</request-map>
+	
+	<request-map uri="upload-file-vrp3d">
+		<security https="true" auth="true" />
+		<event type="java" path="org.bkofbiz.slp.tspd.VRP3DService" invoke="computevrp3d"></event>
+		<response name="AttachementSuccess" type="view" value="viewVrp3dSolution" />
+	</request-map>
+	
+	<request-map uri="compute-vrp3d-solution">
+		<security https="true" auth="true" />
+		<event type="service" invoke="returnsolution"></event>
+		<response name="success" type="request" value="json" />
+	</request-map>
+
+	<!-- Create Sample Data -->
+	<request-map uri="create-sample-data">
+		<security https="true" auth="true" />
+		<response name="success" type="view" value="createsampledata" />
+	</request-map>
+	
+	<request-map uri="save-sample-data">
+		<security https="true" auth="true" />
+		<event type="service" invoke="savesampledata"></event>
+		<response name="success" type="request-redirect" value="create-sample-data" />
+	</request-map>
+	
+	<!-- Get all data set -->
+	<request-map uri="get-data-set">
+		<security https="false" auth="false" />
+		<event type="service" invoke="getdatasets"></event>
+		<response name="success" type="request" value="json" />
+	</request-map>
+	
+	<!-- Get all direction in a DataSet -->
+	<request-map uri="get-directions">
+		<security https="true" auth="true" />
+		<event type="service" invoke="getdirections"></event>
+		<response name="success" type="request" value="json" />
+	</request-map>
+	
+	<!-- Get all Point in a DataSet -->
+	<request-map uri="get-points">
+		<security https="true" auth="true" />
+		<event type="service" invoke="getpoints"></event>
+		<response name="success" type="request" value="json" />
+	</request-map>
+	
+	<!-- View Mappings -->
+	<view-map name="main" type="screen"
+		page="component://slp/widget/SlpScreens.xml#main" />
+	<view-map name="tspdhome" type="screen"
+		page="component://slp/widget/SlpScreens.xml#tspdhome" />
+	<view-map name="tspdsolution" type="screen"
+		page="component://slp/widget/SlpScreens.xml#tspdsolution" />
+	<view-map name="tspkdsolution" type="screen"
+		page="component://slp/widget/SlpScreens.xml#tspkdsolution" />
+	<view-map name="tspkdsolutionls" type="screen"
+		page="component://slp/widget/SlpScreens.xml#tspkdsolutionls" />
+	<view-map name="tspdselectmodule" type="screen"
+		page="component://slp/widget/SlpScreens.xml#tspdselectmodule" />
+	<view-map name="uploadvrp3d" type="screen"
+		page="component://slp/widget/SlpScreens.xml#uploadvrp3d" />
+	<view-map name="viewVrp3dSolution" type="screen"
+		page="component://slp/widget/SlpScreens.xml#viewVrp3dSolution" />
+	<view-map name="createsampledata" type="screen"
+		page="component://slp/widget/SlpScreens.xml#createsampledata" />
+		
+	<view-map name="view-cvrp" type="screen"
+		page="component://slp/widget/SlpScreens.xml#pageCVRP" />
+
+</site-conf>

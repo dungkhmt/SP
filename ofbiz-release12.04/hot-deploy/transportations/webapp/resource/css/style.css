@@ -1,0 +1,87 @@
+html, body {
+    min-height: 100% !important;
+    height: 100%;
+    overflow: hidden;
+}
+
+.body {
+    flex: 1 1 0%;
+    overflow-y:auto;
+}
+
+.table .header-row {
+    font-weight: bold;
+}
+/* 
+.footer{
+	position: fixed;
+	
+	
+	width: 80%;
+	
+	margin-left: 10%;
+	margin-right: 10%;
+	
+	bottom: 0;
+	height: 7em;
+	
+    
+}
+
+.footer .footer-content {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #586069;
+	font: normal 16px sans-serif;
+		
+	border-top: 1px solid #eaecef;
+	
+    padding-top: 10px;
+    padding-bottom: 10px;
+    
+    margin-top: 40px;
+	
+} */
+
+/*basic form*/
+.basic-form {
+  padding: 10px 10px;
+  font-style: 14px;
+  background-color: #eee;
+  border-radius: 5px;
+}
+
+.basic-form  .label {
+  min-width: 150px;
+}
+
+.basic-form td {
+  padding: 5px;
+  min-height: 200px;
+}
+
+.basic-form select {
+  max-width: 200px;
+}
+
+.basic-form .label {
+    display: table-cell;
+}
+
+/*reset label*/
+.label {
+    display: inline; 
+    padding: 0; 
+    font-size: 14px; 
+    font-weight: normal; 
+    line-height: initial; 
+    color: #333; 
+    text-align: center; 
+    white-space: normal; 
+    vertical-align: initial; 
+    border-radius: 0; 
+}
+
+.pagination {
+    margin: 0;
+}

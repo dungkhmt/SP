@@ -1,0 +1,52 @@
+#modal-template {
+	margin-top: 5%;
+}
+
+.modal-body .container-fluid .inline-box {
+    position: relative;
+    display: -webkit-box;
+    padding: 10px 5px 10px 5px;
+}
+
+.modal-body {
+	padding: 30px;	
+}
+
+.modal {
+	overflow: hidden!important;
+}
+
+.modal-dialog {
+	width: 60%!important; /* respsonsive width */
+    margin-left:20%!important; /* width/2) */ 
+}
+
+.modal-body .container-fluid .inline-box:hover {
+    background-color: (0, 0%, 93.3%, .4);
+    border-radius: 5px;
+}
+
+.modal-body {
+    overflow-y: auto;
+}
+
+label#title-modal-input {
+    padding: 5px;
+    line-height: 1.5;
+    flex: 1 1 auto;
+    display: block;
+    width: 30%;
+}
+
+.inline-box .form-control {
+	width: 70%;
+}
+
+input.form-control:disabled {
+	background: none;
+    border: none;
+    outline: none;
+    color: #000;
+    cursor: inherit;
+    box-shadow: none;
+}

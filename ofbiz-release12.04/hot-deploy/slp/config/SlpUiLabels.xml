@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <property key="SlpApplication">
+        <value xml:lang="en">Slp Application</value>
+        <value xml:lang="zh">Slp应用程序</value>
+    </property>
+    <property key="SlpCompanyName">
+        <value xml:lang="en">OFBiz: Slp</value>
+    </property>
+    <property key="SlpCompanySubtitle">
+        <value xml:lang="en">Part of the Open For Business Family of Open Source Software</value>
+        <value xml:lang="it">Un modulo della famiglia di software open source Open For Business</value>
+        <value xml:lang="zh">开源软件OFBiz的组成部分</value>
+    </property>
+    <property key="SlpViewPermissionError">
+        <value xml:lang="en">You are not allowed to view this page.</value>
+        <value xml:lang="zh">不允许你浏览这个页面。</value>
+    </property>
+    <property key="SlpNameComponent">
+        <value xml:lang="en">Traveling Saleman Problem with Drone</value>
+        <value xml:lang="vi">Bài toán người du lịch sử dụng drone</value>
+    </property>
+	
+	<property key="uploadsolution">
+        <value xml:lang="en">Upload Solution</value>
+        <value xml:lang="vi">Hiển thị kết quả có sẵn</value>
+    </property>
+	
+	<property key="truckspeed">
+        <value xml:lang="en">Truck speed</value>
+        <value xml:lang="vi">Tốc độ của xe tải</value>
+    </property>
+	
+	<property key="dronespeed">
+        <value xml:lang="en">Drone Speed</value>
+        <value xml:lang="vi">Tốc độ của drone</value>
+    </property>
+	
+	<property key="costtruck">
+        <value xml:lang="en">Cost per unit(km) of truck</value>
+        <value xml:lang="vi">Chi phí của xe tải/(1 km)</value>
+    </property>
+	
+	<property key="costdrone">
+        <value xml:lang="en">Cost per unit (km) of drone</value>
+        <value xml:lang="vi">Chi phí của drone/(1 km)</value>
+    </property>
+	
+	<property key="delta">
+        <value xml:lang="en">Wait time(Delta)</value>
+        <value xml:lang="vi">Thời gian chờ đợi lớn nhất</value>
+    </property>
+	
+	<property key="droneendurance">
+        <value xml:lang="en">Drone endurance</value>
+        <value xml:lang="vi">Giới hạn bay của drone</value>
+    </property>
+	
+	<property key="start">
+        <value xml:lang="en">Start</value>
+        <value xml:lang="vi">Bắt đầu</value>
+    </property>
+	
+	<property key="saveinput">
+        <value xml:lang="en">Save</value>
+        <value xml:lang="vi">Lưu lại</value>
+    </property>
+	
+	<property key="uploadinput">
+        <value xml:lang="en">Upload</value>
+        <value xml:lang="vi">Tải lên</value>
+    </property>
+	
+	<property key="hire">
+        <value xml:lang="en">Hire</value>
+        <value xml:lang="vi">Ẩn</value>
+    </property>
+	
+	<property key="view">
+        <value xml:lang="en">View</value>
+        <value xml:lang="vi">Hiện</value>
+    </property>
+	
+	<property key="savesolution">
+        <value xml:lang="en">Save Solution</value>
+        <value xml:lang="vi">Lưu lại kết quả</value>
+    </property>
+	
+	<property key="pleasewait">
+        <value xml:lang="en">Please Wait..</value>
+        <value xml:lang="vi">Xin đợi giây lát..</value>
+    </property>
+	
+	<property key="done">
+        <value xml:lang="en">Done</value>
+        <value xml:lang="vi">Hoàn thành</value>
+    </property>
+	
+	<property key="solutiontspd">
+        <value xml:lang="en">Solution Traveling Saleman Problem with A Drone</value>
+        <value xml:lang="vi">Kết quả bài toán người du lịch sử dụng một drone</value>
+    </property>
+	
+	<property key="solutiontspkd">
+        <value xml:lang="en">Solution Traveling Saleman Problem with multi Drone</value>
+        <value xml:lang="vi">Kết quả bài toán người du lịch sử dụng nhiều drone</value>
+    </property>
+    
+    <property key="name">
+        <value xml:lang="en">Name</value>
+        <value xml:lang="vi">Tên bộ dữ liệu</value>
+    </property>
+    
+    <property key="description">
+        <value xml:lang="en">Description</value>
+        <value xml:lang="vi">Mô tả bộ dữ liệu</value>
+    </property>
+    
+    <property key="sampledataheader">
+        <value xml:lang="en">Create data sample</value>
+        <value xml:lang="vi">Tạo bộ dữ liệu mẫu</value>
+    </property>
+</resource>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+	<Warehouse warehouseId="00010"  warehouseName="Coca cola Xã Đàn" latitude="21.018104876732224" longitude="105.82956268680732"/>
+	<Warehouse warehouseId="00020"  warehouseName="Coca cola Giáp Bát" latitude="20.983428364678517" longitude="105.840915164296"/>
+	
+	<Warehouse warehouseId="00020"  warehouseName="Coca cola Vĩnh Tuy" latitude="21.003882135458294" longitude="105.87220045812785"/>
+	
+	
+	<Vehicle vehicleId="34A-04703" vehicleCode="34A-04703" description="toyota fortuner" weight="1.7 tan"/>
+	<Vehicle vehicleId="34A-43256" vehicleCode="34A-43256" description="toyota camry" weight="1.5 tan"/>
+	<Vehicle vehicleId="34A-04209" vehicleCode="34A-04209" description="ford ranger" weight="1.8 tan"/>
+	
+	<Driver driverId="PQD" driverName="Pham Quang Dung"/>
+	<Driver driverId="DTH" driverName="Dong thi Huyen"/>
+	<Driver driverId="TTHT" driverName="Tran Thi Hong Thu"/>
+	<Driver driverId="LVD" driverName="Le Van Duc"/>
+	
+	<DriverVehicle vehicleId="34A-04703" driverId="PQD" fromDate="2/2/2014"/>
+	<DriverVehicle vehicleId="34A-43256" driverId="LVD" fromDate="1/5/2014"/>
+	<DriverVehicle vehicleId="34A-04209" driverId="TTHT" fromDate="13/9/2015"/>
+</entity-engine-xml>

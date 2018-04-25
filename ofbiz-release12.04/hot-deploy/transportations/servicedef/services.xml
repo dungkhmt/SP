@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>Transportations Services</description>
+    <vendor></vendor>
+    <version>1.0</version>
+
+    <service name="noSyntaxError" engine="interface">
+        <description>
+            Dummy service to prevent empty files and syntax error - Remove when the 1st real service will be added here 
+        </description>
+    </service> 
+    
+    <service name="getWarehouses" engine="java"
+    	location="org.ofbiz.gooddelivery.DeliveryRequestService" invoke="getWarehouses">
+    	<attribute name="listWarehouses" mode="OUT" type="List"></attribute>
+    </service>
+    
+    <service name="getDeliveryRequests" engine="java"
+    	location="org.ofbiz.gooddelivery.DeliveryRequestService" invoke="getDeliveryRequests">
+    	<attribute name="listRequests" mode="OUT" type="List"></attribute>
+    </service>
+    
+    
+    
+    <service name="getPermissionFunctions" engine="java"
+            location="org.ofbiz.permission.PermissionService" invoke="getPermissionFunctions">
+       <attribute name="permissionFunctions" mode="OUT" type="List"></attribute>
+    </service>
+        <service name="getListSecurityGroups" engine="java"
+    	location="org.ofbiz.permission.PermissionService" invoke="getListSecurityGroups">
+    	<attribute name="securityGroups" mode="OUT" type="List"></attribute>
+    </service>
+    <service name="getListFunctions" engine="java"
+    	location="org.ofbiz.permission.PermissionService" invoke="getListFunctions">
+    	<attribute name="functions" mode="OUT" type="List"></attribute>
+    </service>
+    
+    <service name="updateSecurityGroupFunction" engine="java"
+    	location="org.ofbiz.permission.PermissionService" invoke="updateSecurityGroupFunction">
+    	<attribute name="groupId" mode="IN" type="String"></attribute>
+    	<attribute name="functions[]" mode="IN" type="List"></attribute>
+    	<attribute name="message" mode="OUT" type="String"></attribute>
+    </service>
+    
+        <service name="getStaffs" engine="java" 
+    		location="org.ofbiz.staffmanagement.StaffService" invoke="getStaffs">
+    	<attribute name="q" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="staffs" mode="OUT" type="List"></attribute>
+    </service>
+    <service name="getAllStaffs" engine="java" 
+    		location="org.ofbiz.staffmanagement.StaffService" invoke="getAllStaffs">
+    	<attribute name="staffs" mode="OUT" type="List"></attribute>
+    </service>
+    
+    <service name="getStaffInfo" engine="java" 
+    		location="org.ofbiz.staffmanagement.StaffService" invoke="getStaffInfo">
+    	<attribute name="staffId" mode="IN" type="String" optional="true"></attribute>	
+    	<attribute name="staff" mode="OUT" type="Map"></attribute>
+    	<attribute name="departments" mode="OUT" type="List"></attribute>
+    	<attribute name="faculties" mode="OUT" type="List"></attribute>
+    	<attribute name="genders" mode="OUT" type="List"></attribute>
+    	<attribute name="selected_department_id" mode="OUT" type="String"></attribute>
+    	<attribute name="selected_faculty_id" mode="OUT" type="String"></attribute>
+    </service>
+    
+    <service name="getGenders" engine="java" 
+    		location="org.ofbiz.staffmanagement.StaffService" invoke="getGenders">
+    	<attribute name="genders" mode="OUT" type="List"></attribute>
+    </service>
+	
+    <service name="updateStaff" engine="java" 
+    		location="org.ofbiz.staffmanagement.StaffService" invoke="updateStaff">
+    	<attribute name="staffId" mode="IN" type="String"></attribute>
+    	<attribute name="staffName" mode="IN" type="String"></attribute>
+    	<attribute name="staffEmail" mode="IN" type="String"></attribute>
+    	<attribute name="staffDateOfBirth" mode="IN" type="String"></attribute>
+    	<attribute name="staffPhone" mode="IN" type="String"></attribute>
+    	<attribute name="departmentId[]" mode="IN" type="List"></attribute>
+    	<attribute name="staffGenderId[]" mode="IN" type="List"></attribute>
+    	
+    	<attribute name="staffs" mode="OUT" type="Map"></attribute> 
+    </service>
+    <service name="removeAStaff" engine="java" 
+    		location="org.ofbiz.staffmanagement.StaffService" invoke="removeAStaff">
+    	<attribute name="staffId" mode="IN" type="String"></attribute>
+    	<attribute name="message" mode="OUT" type="String"></attribute>
+    </service>
+
+    <service name="createAStaff" engine="java" 
+    		location="org.ofbiz.staffmanagement.StaffService" invoke="createAStaff">
+    	<attribute name="staffId" mode="IN" type="String"></attribute>
+    	<attribute name="password" mode="IN" type="String"></attribute>
+    	<attribute name="staffName" mode="IN" type="String"></attribute>
+    	<attribute name="staffDateOfBirth" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="staffPhone" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="departmentId[]" mode="IN" type="List" optional="true"></attribute>
+    	<attribute name="staffGenderId[]" mode="IN" type="List" optional="true"></attribute>
+    	<attribute name="groupId" mode="IN" type="String"></attribute>
+    	
+    	<attribute name="staffs" mode="OUT" type="Map"></attribute> 
+    	<attribute name="message" mode="OUT" type="String"></attribute>
+    </service>
+    <service name="addPermissionGroupStaff" engine="java" 
+    		location="org.ofbiz.staffmanagement.StaffService" invoke="addPermissionGroupStaff">
+    	<attribute name="staffId" mode="IN" type="String"></attribute>
+    	<attribute name="groupId" mode="IN" type="String"></attribute>
+    </service>
+    
+     <service name="createARoute" engine="java"
+            location="org.ofbiz.routes.RouteService" invoke="createARoute">
+       <attribute name="shipper" mode="IN" type="String"></attribute>
+       <attribute name="date" mode="IN" type="String"></attribute>
+       <attribute name="seq" mode="IN" type="Integer"></attribute>
+       <attribute name="routeid" mode="OUT" type="String" optional="false"></attribute>       
+    </service>
+    
+</services>
