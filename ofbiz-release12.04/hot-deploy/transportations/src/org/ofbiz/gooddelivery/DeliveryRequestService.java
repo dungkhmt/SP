@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +21,10 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.gooddelivery.model.ConfigParams;
+import org.ofbiz.gooddelivery.model.Depot;
 import org.ofbiz.gooddelivery.model.DistanceElement;
 import org.ofbiz.gooddelivery.model.Request;
+import org.ofbiz.gooddelivery.model.RoutingDeliveryMultiDepotInput;
 import org.ofbiz.gooddelivery.model.RoutingLoad3DInput;
 import org.ofbiz.gooddelivery.model.Vehicle;
 import org.ofbiz.service.DispatchContext;
@@ -47,7 +50,7 @@ public class DeliveryRequestService {
 				GenericValue gv = lstRequests.get(i);
 				double lat = (double)gv.get("latitude");
 				double lng = (double)gv.get("longitude");
-				String orderID = gv.getString("deliveryOrderId");
+				String orderID = "DO-" + gv.getString("deliveryOrderId");
 				SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 				Timestamp e = (Timestamp)gv.get("fromDate");
 				Timestamp l = (Timestamp)gv.get("thruDate");
@@ -56,19 +59,34 @@ public class DeliveryRequestService {
 				String lateDeliveryTime = l.toString();
 				req[i] = new Request("-", lat, lng, orderID, null, earlyDeliveryTime, lateDeliveryTime);
 			}
-
-			Vehicle[] vehicles = new Vehicle[lstWarehouses.size()];
+			ArrayList<Vehicle> lstVehicles = new ArrayList<Vehicle>();
+			Depot[] depots = new Depot[lstWarehouses.size()];
 			for(int i = 0; i < lstWarehouses.size(); i++){
-				GenericValue gv = lstWarehouses.get(i);
-				vehicles[i] = new Vehicle(0, 0, 0, "v-" + gv.getString("warehouseId"));
+				GenericValue wh = lstWarehouses.get(i);
+				double lat = wh.getDouble("latitude");
+				double lng = wh.getDouble("longitude");
+				String code = wh.getString("warehouseId");
+				
+				Vehicle[] vehicles = new Vehicle[1];
+				
+				vehicles[0] = new Vehicle(0,0,0,code,lat,lng);
+				depots[i] = new Depot(code,lat,lng,vehicles);
+				
+				lstVehicles.add(vehicles[0]);
 			}
+
+			Vehicle[] vehicles = new Vehicle[lstVehicles.size()];
+			for(int i = 0; i < lstWarehouses.size(); i++){
+				vehicles[i] = lstVehicles.get(i);
+			}
+			
 			int N = req.length + vehicles.length;
 			DistanceElement[] distances = new DistanceElement[N*(N-1)];
 			int idx = -1;
 			for(int i = 0; i < req.length; i++){
-				String codei = "o-" + req[i].getOrderID();
+				String codei = req[i].getOrderID();
 				for(int j = 0; j < req.length; j++)if(i != j){
-					String codej = "o-" + req[j].getOrderID();
+					String codej = req[j].getOrderID();
 					idx++;
 					double d = DeliveryRequestServiceUtil.getMahattanDistance(req[i].getLat(), req[i].getLng(), 
 							req[j].getLat(),req[j].getLng());
@@ -90,13 +108,13 @@ public class DeliveryRequestService {
 				double lngi = (double)lstWarehouses.get(i).get("longitude");
 			 
 				for(int j = 0; j < req.length; j++){
-					String codej = "o-" + req[j].getOrderID();
+					String codej = req[j].getOrderID();
 					idx++;
 					double d = DeliveryRequestServiceUtil.getMahattanDistance(lati, lngi, 
 							req[j].getLat(),req[j].getLng());
 					distances[idx]= new DistanceElement(codei, codej, d);
 				}
-				for(int j = 0; j < vehicles.length; j++){
+				for(int j = 0; j < vehicles.length; j++)if(i != j){
 					String codej = vehicles[j].getCode();
 					idx++;
 					double latj = (double)lstWarehouses.get(j).get("latitude");
@@ -108,7 +126,8 @@ public class DeliveryRequestService {
 			}
 			
 			ConfigParams configParams = new ConfigParams();
-			RoutingLoad3DInput input = new RoutingLoad3DInput(req, vehicles, distances, null, vehicles.length, configParams);
+			//RoutingLoad3DInput input = new RoutingLoad3DInput(req, vehicles, distances, null, vehicles.length, configParams);
+			RoutingDeliveryMultiDepotInput input = new RoutingDeliveryMultiDepotInput(req, distances, depots, configParams);
 			
 			
 			//URL url = new URL("http://localhost:8080/DailyOptAPI/basic");
@@ -138,14 +157,22 @@ public class DeliveryRequestService {
 			BufferedReader br = new BufferedReader(new InputStreamReader(
 					(conn.getInputStream())));
 
+			String rs = "";
 			String output;
 			System.out.println("Output from Server .... \n");
 			while ((output = br.readLine()) != null) {
 				System.out.println(output);
+				rs += output;
 			}
 
 			conn.disconnect();
 			
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(rs);
+			out.close();
+			System.out.println("RETURN json = " + rs);
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}

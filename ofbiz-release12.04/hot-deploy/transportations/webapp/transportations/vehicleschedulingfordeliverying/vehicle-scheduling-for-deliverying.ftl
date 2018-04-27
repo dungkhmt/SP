@@ -124,6 +124,8 @@ mapTypeId: google.maps.MapTypeId.ROADMAP
 var map;
 var points;
 var warehouses;
+var routes = [];
+var resultAjax;
 $(document).ready(function(){
 	//alert('LOAD');
 	initMap();
@@ -236,6 +238,32 @@ function computeRoutes(){
 			type: 'POST',
 			success: function(rs){
 				console.log(rs);
+				resultAjax = rs;
+				
+				for(i = 0; i < rs.routes.length; i++){
+					var route = rs.routes[i].elements;
+					var aRoute = [];
+					for(j = 0; j < route.length; j++){
+						//var latlng = route[j].latlng;
+						var lat = route[j].lat;
+						var lng = route[j].lng;
+						var latlng = new Object();
+						latlng.lat = lat;
+						latlng.lng = lng; 
+						//alert(latlng);
+						aRoute.push(latlng);
+					}
+					routes.push(aRoute);
+					
+					var path = new google.maps.Polyline({
+						path: aRoute,
+						geodisc: true,
+						strokeColor: '#FF0000',
+						strokeWeight: 2
+					});
+					path.setMap(map);
+				}
+				
 			}
 		})
 
