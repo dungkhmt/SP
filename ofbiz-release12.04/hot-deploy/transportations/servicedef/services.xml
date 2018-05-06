@@ -21,6 +21,10 @@
     	<attribute name="listRequests" mode="OUT" type="List"></attribute>
     </service>
     
+    <service name="computeUpdateAllDistanceDB" engine="java"
+    	location="org.ofbiz.gooddelivery.DeliveryRequestService" invoke="computeUpdateAllDistanceDB">
+    	
+    </service>
     
     
     <service name="getPermissionFunctions" engine="java"

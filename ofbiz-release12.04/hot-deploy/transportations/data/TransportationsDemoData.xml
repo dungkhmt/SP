@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entity-engine-xml>
+
 	<Warehouse warehouseId="00010"  warehouseName="Coca cola Xã Đàn" latitude="21.018104876732224" longitude="105.82956268680732"/>
 	<Warehouse warehouseId="00020"  warehouseName="Coca cola Giáp Bát" latitude="20.983428364678517" longitude="105.840915164296"/>
 	
-	<Warehouse warehouseId="00020"  warehouseName="Coca cola Vĩnh Tuy" latitude="21.003882135458294" longitude="105.87220045812785"/>
+	<Warehouse warehouseId="00030"  warehouseName="Coca cola Vĩnh Tuy" latitude="21.003882135458294" longitude="105.87220045812785"/>
 	
 	
 	<Vehicle vehicleId="34A-04703" vehicleCode="34A-04703" description="toyota fortuner" weight="1.7 tan"/>
@@ -18,4 +19,34 @@
 	<DriverVehicle vehicleId="34A-04703" driverId="PQD" fromDate="2/2/2014"/>
 	<DriverVehicle vehicleId="34A-43256" driverId="LVD" fromDate="1/5/2014"/>
 	<DriverVehicle vehicleId="34A-04209" driverId="TTHT" fromDate="13/9/2015"/>
+
+	<Function functionId="CONFIG_MANAGEMENT" uiLabelId="config management" vnLabel="Cấu hình" enLabel="Config management" parentFunctionId="NULL" index="1" lastUpdatedStamp="2018-04-22 22:02:43.717" lastUpdatedTxStamp="2018-04-22 22:02:43.715" createdStamp="2018-04-22 22:02:43.717" createdTxStamp="2018-04-22 22:02:43.715"/>
+	
+	<Function functionId="WAREHOUSE_MANAGEMENT" uiLabelId="warehouse management" vnLabel="Danh sách kho hàng" enLabel="list warehouses" parentFunctionId="CONFIG_MANAGEMENT" index="1" target="list-warehouse" lastUpdatedStamp="2018-04-22 22:02:43.717" lastUpdatedTxStamp="2018-04-22 22:02:43.715" createdStamp="2018-04-22 22:02:43.717" createdTxStamp="2018-04-22 22:02:43.715"/>
+
+	<Function functionId="CLIENT_MANAGEMENT" uiLabelId="client management" vnLabel="Danh sách khách hàng" enLabel="list clients" parentFunctionId="CONFIG_MANAGEMENT" index="2" target="list-client" lastUpdatedStamp="2018-04-22 22:02:43.717" lastUpdatedTxStamp="2018-04-22 22:02:43.715" createdStamp="2018-04-22 22:02:43.717" createdTxStamp="2018-04-22 22:02:43.715"/>
+	
+	<Function functionId="VEHICLE_SCHEDULING" uiLabelId="vehicle scheduling" vnLabel="L&#7853;p l&#7883;ch cho c&#225;c xe" enLabel="vehicle scheduling" parentFunctionId="NULL" index="1" lastUpdatedStamp="2018-04-22 22:02:43.717" lastUpdatedTxStamp="2018-04-22 22:02:43.715" createdStamp="2018-04-22 22:02:43.717" createdTxStamp="2018-04-22 22:02:43.715"/>
+    
+	
+	<Function functionId="VEHICLE_SCHEDULING_DELIVERY_REQUEST_MANAGEMENT" uiLabelId="delivery request management" vnLabel="Quản lý vận đơn giao hàng" enLabel="Delivery request management" target="vehicle-scheduling-delivery-request-management" parentFunctionId="VEHICLE_SCHEDULING" index="1" lastUpdatedStamp="2018-04-22 22:02:43.739" lastUpdatedTxStamp="2018-04-22 22:02:43.715" createdStamp="2018-04-22 22:02:43.739" createdTxStamp="2018-04-22 22:02:43.715"/>
+
+	<Function functionId="VEHICLE_SCHEDULING_CREATE_DELIVERY_ROUTE_MANUAL" uiLabelId="create delivery routes" vnLabel="Lập tuyến giao hàng từ kho" enLabel="create delivery routes manually" target="vehicle-scheduling-create-delivery-routes-manual" parentFunctionId="VEHICLE_SCHEDULING" index="2" lastUpdatedStamp="2018-04-22 22:02:43.739" lastUpdatedTxStamp="2018-04-22 22:02:43.715" createdStamp="2018-04-22 22:02:43.739" createdTxStamp="2018-04-22 22:02:43.715"/>
+
+	<Function functionId="VEHICLE_SCHEDULING_DELIVERY" uiLabelId="vehicle scheduling for deliverying" vnLabel="Gợi ý tự động tuyến giao hàng từ kho" enLabel="Vehicle scheduling for deliverying" target="vehicle-scheduling-for-deliverying" parentFunctionId="VEHICLE_SCHEDULING" index="3" lastUpdatedStamp="2018-04-22 22:02:43.739" lastUpdatedTxStamp="2018-04-22 22:02:43.715" createdStamp="2018-04-22 22:02:43.739" createdTxStamp="2018-04-22 22:02:43.715"/>
+
+	<GroupFunction groupFunctionId="BIZSTAFF_CONFIG_MANAGEMENT" securityGroupId="BIZSTAFF" functionId="CONFIG_MANAGEMENT" fromDate="2000-01-01 00:00:00.0" lastUpdatedStamp="2018-04-22 22:02:43.866" lastUpdatedTxStamp="2018-04-22 22:02:43.715" createdStamp="2018-04-22 22:02:43.866" createdTxStamp="2018-04-22 22:02:43.715"/>
+
+	<GroupFunction groupFunctionId="BIZSTAFF_WAREHOUSE_MANAGEMENT" securityGroupId="BIZSTAFF" functionId="WAREHOUSE_MANAGEMENT" fromDate="2000-01-01 00:00:00.0" lastUpdatedStamp="2018-04-22 22:02:43.866" lastUpdatedTxStamp="2018-04-22 22:02:43.715" createdStamp="2018-04-22 22:02:43.866" createdTxStamp="2018-04-22 22:02:43.715"/>
+
+	<GroupFunction groupFunctionId="BIZSTAFF_CLIENT_MANAGEMENT" securityGroupId="BIZSTAFF" functionId="CLIENT_MANAGEMENT" fromDate="2000-01-01 00:00:00.0" lastUpdatedStamp="2018-04-22 22:02:43.866" lastUpdatedTxStamp="2018-04-22 22:02:43.715" createdStamp="2018-04-22 22:02:43.866" createdTxStamp="2018-04-22 22:02:43.715"/>
+    
+	
+    <GroupFunction groupFunctionId="BIZSTAFF_VEHICLE_SCHEDULING_DELIVERY" securityGroupId="BIZSTAFF" functionId="VEHICLE_SCHEDULING_DELIVERY" fromDate="2000-01-01 00:00:00.0" lastUpdatedStamp="2018-04-22 22:02:43.866" lastUpdatedTxStamp="2018-04-22 22:02:43.715" createdStamp="2018-04-22 22:02:43.866" createdTxStamp="2018-04-22 22:02:43.715"/>
+
+    <GroupFunction groupFunctionId="BIZSTAFF_VEHICLE_SCHEDULING_CREATE_DELIVERY_ROUTE_MANUAL" securityGroupId="BIZSTAFF" functionId="VEHICLE_SCHEDULING_CREATE_DELIVERY_ROUTE_MANUAL" fromDate="2000-01-01 00:00:00.0" lastUpdatedStamp="2018-04-22 22:02:43.866" lastUpdatedTxStamp="2018-04-22 22:02:43.715" createdStamp="2018-04-22 22:02:43.866" createdTxStamp="2018-04-22 22:02:43.715"/>
+
+    <GroupFunction groupFunctionId="BIZSTAFF_VEHICLE_SCHEDULING_DELIVERY_REQUEST_MANAGEMENT" securityGroupId="BIZSTAFF" functionId="VEHICLE_SCHEDULING_DELIVERY_REQUEST_MANAGEMENT" fromDate="2000-01-01 00:00:00.0" lastUpdatedStamp="2018-04-22 22:02:43.866" lastUpdatedTxStamp="2018-04-22 22:02:43.715" createdStamp="2018-04-22 22:02:43.866" createdTxStamp="2018-04-22 22:02:43.715"/>
+
+	
 </entity-engine-xml>

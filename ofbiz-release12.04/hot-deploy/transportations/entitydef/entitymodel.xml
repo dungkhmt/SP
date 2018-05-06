@@ -13,22 +13,96 @@
 	<entity entity-name="Warehouse" package-name="org.ofbiz.transportations">
 		<field name="warehouseId" type="id-ne"></field>
 		<field name="warehouseName" type="very-long"></field>
+		<!-- 
 		<field name="latitude" type="floating-point"></field>
 		<field name="longitude" type="floating-point"></field>
+		 -->
+		<field name="geoPointId" type="id-ne"></field>
 		<prim-key field="warehouseId"/>
+		
+		<relation rel-entity-name="GeoPoint" type="one">
+			<key-map field-name="geoPointId"/>
+		</relation>
 	</entity>
+	<view-entity entity-name="WarehouseView" package-name="org.ofbiz.transportations">
+		<member-entity entity-alias="WH" entity-name="Warehouse"></member-entity>
+		<member-entity entity-alias="GP" entity-name="GeoPoint"></member-entity>
+		<alias-all entity-alias="WH"></alias-all>
+		<alias name="latitude" field="latitude" entity-alias="GP"></alias>
+		<alias name="longitude" field="longitude" entity-alias="GP"></alias>
+		<alias name="geoPointId" field="geoPointId" entity-alias="GP"></alias>
+		<view-link rel-entity-alias="GP" entity-alias="WH">
+			<key-map field-name="geoPointId" rel-field-name="geoPointId"/>
+		</view-link>
+	</view-entity>
+	 
+	<entity entity-name="Client" package-name="org.ofbiz.transportations">
+		<field name="clientId" type="id-ne"></field>
+		<field name="clientName" type="very-long"></field>
+		<field name="geoPointId" type="id-ne"></field>
+		<prim-key field="clientId"/>
+		
+		<relation rel-entity-name="GeoPoint" type="one">
+			<key-map field-name="geoPointId"/>
+		</relation>
+	</entity>
+	<view-entity entity-name="ClientView" package-name="org.ofbiz.transportations">
+		<member-entity entity-alias="C" entity-name="Client"></member-entity>
+		<member-entity entity-alias="GP" entity-name="GeoPoint"></member-entity>
+		<alias-all entity-alias="C"></alias-all>
+		<alias name="latitude" field="latitude" entity-alias="GP"></alias>
+		<alias name="longitude" field="longitude" entity-alias="GP"></alias>
+		<alias name="geoPointId" field="geoPointId" entity-alias="GP"></alias>
+		<view-link rel-entity-alias="GP" entity-alias="C">
+			<key-map field-name="geoPointId" rel-field-name="geoPointId"/>
+		</view-link>
+	</view-entity>
 	
 	<entity entity-name="DeliveryOrder" package-name="org.ofbiz.transportations">
 		<field name="deliveryOrderId" type="id-ne"></field>
+		<field name="clientId" type="id-ne"></field>
+		<!-- 
 		<field name="latitude" type="floating-point"></field>
 		<field name="longitude" type="floating-point"></field>
 		<field name="address" type="very-long"></field>
+		 -->
 		<field name="quantity" type="numeric"></field>
 		<field name="fromDate" type="date-time"></field>	
 		<field name="thruDate" type="date-time"></field>
 		<prim-key field="deliveryOrderId"/>
+		
+		<relation rel-entity-name="Client" type="one">
+			<key-map field-name="clientId"/>
+		</relation>
 	</entity>
 	
+	<view-entity entity-name="DeliveryOrderView" package-name="org.ofbiz.transportations">
+		<member-entity entity-alias="D" entity-name="DeliveryOrder"></member-entity>
+		<member-entity entity-alias="C" entity-name="ClientView"></member-entity>
+		<alias-all entity-alias="D"></alias-all>
+		<alias name="latitude" field="latitude" entity-alias="C"></alias>
+		<alias name="longitude" field="longitude" entity-alias="C"></alias>
+		<alias name="geoPointId" field="geoPointId" entity-alias="C"></alias>
+		<view-link rel-entity-alias="C" entity-alias="D">
+			<key-map field-name="clientId" rel-field-name="clientId"/>
+		</view-link>
+	</view-entity>
+	
+	<entity entity-name="Distance" package-name="org.ofbiz.transportations">
+		<field name="fromGeoPointId" type="id-ne"></field>
+		<field name="toGeoPointId" type="id-ne"></field>
+		<field name="distance" type="floating-point"></field>
+		<prim-key field="fromGeoPointId"/>
+		<prim-key field="toGeoPointId"/>
+		
+		<relation rel-entity-name="GeoPoint" type="one">
+			<key-map field-name="fromGeoPointId" rel-field-name="geoPointId"/>
+		</relation>
+		<relation rel-entity-name="GeoPoint" type="one">
+			<key-map field-name="toGeoPointId" rel-field-name="geoPointId"/>
+		</relation>
+		
+	</entity>	
 	<entity entity-name="Vehicle" package-name="org.ofbiz.transportations">
 		<field name="vehicleId" type="id-ne"></field>
 		<field name="vehicleCode" type="name"></field>

@@ -27,11 +27,43 @@
     	<response name="success" type="view" value="main"/>
     </request-map>
    
+    <request-map uri="list-warehouse">
+	    <security https="true" auth="true"/>
+	    <response name="success" type="view" value="view-list-warehouse"/>
+    </request-map>
+
+    <request-map uri="list-client">
+	    <security https="true" auth="true"/>
+	    <response name="success" type="view" value="view-list-client"/>
+    </request-map>
+
+    <request-map uri="vehicle-scheduling-for-deliverying">
+	    <security https="true" auth="true"/>
+	    <response name="success" type="view" value="view-vehicle-scheduling-for-deliverying"/>
+    </request-map>
+
+    <request-map uri="vehicle-scheduling-delivery-request-management">
+	    <security https="true" auth="true"/>
+	    <response name="success" type="view" value="view-vehicle-scheduling-delivery-request-management"/>
+    </request-map>
+
+    <request-map uri="vehicle-scheduling-create-delivery-routes-manual">
+	    <security https="true" auth="true"/>
+	    <response name="success" type="view" value="view-vehicle-scheduling-create-delivery-routes-manual"/>
+    </request-map>
+   
 	<request-map uri="add-a-delivery-request">
 		<security https="true" auth="true"/>
 		<event type="java" invoke="addADeliveryRequest" 
 		path="org.ofbiz.gooddelivery.DeliveryRequestService"></event>
 		<response name="AttachementSuccess" type="view" value="ADDDELIVERYREQUESTS"/>
+	</request-map>
+
+	<request-map uri="add-a-warehouse">
+		<security https="true" auth="true"/>
+		<event type="java" invoke="addAWarehouse" 
+		path="org.ofbiz.gooddelivery.DeliveryRequestService"></event>
+		<response name="AttachementSuccess" type="view" value="ADDWAREHOUSE"/>
 	</request-map>
 	
 	<request-map uri="get-warehouses">
@@ -40,7 +72,35 @@
 		path="org.ofbiz.gooddelivery.DeliveryRequestService"></event>
 		<response name="AttachementSuccess" type="view" value="GETWAREHOUSES"/>
 	</request-map>
+	
+	<request-map uri="get-distance">
+		<security https="true" auth="true"/>
+		<event type="java" invoke="getDistance"
+		path="org.ofbiz.gooddelivery.DeliveryRequestService"></event>
+		<response name="AttachementSuccess" type="view" value="GETDISTANCE"/>
+	</request-map>
     
+	<request-map uri="add-a-client">
+		<security https="true" auth="true"/>
+		<event type="java" invoke="addAClient" 
+		path="org.ofbiz.gooddelivery.DeliveryRequestService"></event>
+		<response name="AttachementSuccess" type="view" value="ADDCLIENT"/>
+	</request-map>
+
+	<request-map uri="get-client">
+		<security https="true" auth="true"/>
+		<event type="java" invoke="getClients"
+		path="org.ofbiz.gooddelivery.DeliveryRequestService"></event>
+		<response name="AttachementSuccess" type="view" value="GETCLIENTS"/>
+	</request-map>
+
+	<request-map uri="get-client-requests">
+		<security https="true" auth="true"/>
+		<event type="java" invoke="getClientRequests"
+		path="org.ofbiz.gooddelivery.DeliveryRequestService"></event>
+		<response name="AttachementSuccess" type="view" value="GETCLIENTS"/>
+	</request-map>
+
 	<request-map uri="get-delivery-requests">
 		<security https="true" auth="true"/>
 		<event type="java" invoke="getDeliveryRequests"
@@ -122,6 +182,16 @@
 	<view-map name="UploadFile" type="screen" page="component://transportations/widget/TransportationsScreens.xml#pageUploadFile"/>
 	<view-map name="GoogleMaps" type="screen" page="component://transportations/widget/TransportationsScreens.xml#pageGoogleMaps"/>
 	<view-map name="routesPDF" type="screenfop" page="component://transportations/widget/TransportationsScreens.xml#pageRoutesPDF" content-type="application/pdf" encoding="none"/>
+	
+	
+	<view-map name="view-list-warehouse" type="screen" page="component://transportations/widget/TransportationsScreens.xml#ListWarehouse"/>
+	<view-map name="view-list-client" type="screen" page="component://transportations/widget/TransportationsScreens.xml#ListClient"/>
+	
+	<view-map name="view-vehicle-scheduling-for-deliverying" type="screen" page="component://transportations/widget/TransportationsScreens.xml#VehicleSchedulingForDeliverying"/>
+   
+   <view-map name="view-vehicle-scheduling-delivery-request-management" type="screen" page="component://transportations/widget/TransportationsScreens.xml#DeliveryRequestManagement"/>
+    
+   <view-map name="view-vehicle-scheduling-create-delivery-routes-manual" type="screen" page="component://transportations/widget/TransportationsScreens.xml#CreateDeliveryManualRoutes"/>
 	
 	
 	<!-- <view-map name="AttachmentError" type="ftl" page="file_attach_error.ftl"/>

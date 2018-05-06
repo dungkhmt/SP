@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpResponse;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.gooddelivery.model.ConfigParams;
@@ -38,6 +39,12 @@ public class DeliveryRequestService {
 	public static final String module = DeliveryRequestService.class.getName();
 	
 	
+	public static Map<String, Object> computeUpdateAllDistanceDB(DispatchContext ctx, Map<String, ? extends Object> context){
+		Map<String, Object> retSucc = ServiceUtil.returnSuccess();
+		Delegator delegator = ctx.getDelegator();
+		DeliveryRequestServiceUtil.computeUpdateAllDistanceDB(delegator);
+		return retSucc;
+	}
 	public static void computeDeliveryRoutes(HttpServletRequest request, 
 			HttpServletResponse response){
 		try{
@@ -177,16 +184,96 @@ public class DeliveryRequestService {
 			ex.printStackTrace();
 		}
 	}
+
+	public static void addAWarehouse(HttpServletRequest request, 
+			HttpServletResponse response){
+		try{
+			Delegator delegator = (Delegator) request.getAttribute("delegator");
+			String s_location = (String)request.getParameter("location");
+			String name = (String)request.getParameter("name");
+			
+			if(s_location != null && s_location.length() > 0){
+				s_location = s_location.substring(1, s_location.length()-1);
+				String[] s = s_location.split(",");
+				Debug.log(module + "::addAWarehouse, s_location = " + s_location);
+				double lat = Double.valueOf(s[0]);
+				double lng = Double.valueOf(s[1]);
+				GenericValue gp = delegator.makeValue("GeoPoint");
+				String geoPointId = delegator.getNextSeqId("GeoPoint");
+				gp.put("geoPointId", geoPointId);
+				gp.put("latitude", s[0]);
+				gp.put("longitude", s[1]);
+				
+				delegator.create(gp);
+				
+				DeliveryRequestServiceUtil.updateDistance(delegator, geoPointId, lat, lng);
+				
+				
+				GenericValue wh = delegator.makeValue("Warehouse");
+				String warehouseId = delegator.getNextSeqId("Warehouse");
+				wh.put("warehouseId", warehouseId);
+				wh.put("warehouseName", name);
+				wh.put("geoPointId", geoPointId);
+				
+				delegator.create(wh);
+				
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
+	public static void addAClient(HttpServletRequest request, 
+			HttpServletResponse response){
+		try{
+			Delegator delegator = (Delegator) request.getAttribute("delegator");
+			String s_location = (String)request.getParameter("location");
+			String name = (String)request.getParameter("name");
+			
+			if(s_location != null && s_location.length() > 0){
+				s_location = s_location.substring(1, s_location.length()-1);
+				String[] s = s_location.split(",");
+				Debug.log(module + "::addAClient, s_location = " + s_location);
+				double lat = Double.valueOf(s[0]);
+				double lng = Double.valueOf(s[1]);
+				GenericValue gp = delegator.makeValue("GeoPoint");
+				String geoPointId = delegator.getNextSeqId("GeoPoint");
+				gp.put("geoPointId", geoPointId);
+				gp.put("latitude", s[0]);
+				gp.put("longitude", s[1]);
+				
+				delegator.create(gp);
+				
+				DeliveryRequestServiceUtil.updateDistance(delegator, geoPointId, lat, lng);
+				
+				
+				GenericValue cl = delegator.makeValue("Client");
+				String clientId = delegator.getNextSeqId("Client");
+				cl.put("clientId", clientId);
+				cl.put("clientName", name);
+				cl.put("geoPointId", geoPointId);
+				
+				delegator.create(cl);
+				
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
+
 	
 	public static void addADeliveryRequest(HttpServletRequest request, 
+
 			HttpServletResponse response){
 		try{
 			Delegator delegator = (Delegator) request.getAttribute("delegator");
 			String s_quantity = (String)request.getParameter("quantity");
-			String s_location = (String)request.getParameter("location");
+			String clientId = (String)request.getParameter("clientId");
 			String s_early_date_time = (String)request.getParameter("earlyDateTime");
 			String s_late_date_time = (String)request.getParameter("lateDateTime");
-			Debug.log(module + "::addADeliveryRequest, quantity = " + s_quantity + ", location = " + s_location
+			
+			GenericValue client = delegator.findOne("ClientView",UtilMisc.toMap("clientId",clientId),false);
+			
+			Debug.log(module + "::addADeliveryRequest, quantity = " + s_quantity + ", clientId = " + clientId
 					+ ", s_early_date_time = " + s_early_date_time + ", s_late_date_time = " + s_late_date_time);
 			
 			long quantity = 1;
@@ -198,7 +285,9 @@ public class DeliveryRequestService {
 			String deliveryOrderId = delegator.getNextSeqId("DeliveryOrder");
 			gv.put("deliveryOrderId", deliveryOrderId);
 			gv.put("quantity", Long.valueOf(quantity));
+			gv.put("clientId", clientId);
 			
+			/*
 			if(s_location != null && s_location.length() > 0){
 				s_location = s_location.substring(1, s_location.length()-1);
 				String[] s = s_location.split(",");
@@ -208,6 +297,7 @@ public class DeliveryRequestService {
 				gv.put("latitude", lat);
 				gv.put("longitude", lng);
 			}
+			*/
 			
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		    Date parsedDate = dateFormat.parse(s_early_date_time);
@@ -236,6 +326,101 @@ public class DeliveryRequestService {
 		}
 		return retSucc;
 	}
+	public static void getDistance(HttpServletRequest request, HttpServletResponse response){
+		Delegator delegator = (Delegator)request.getAttribute("delegator");
+		String fromPoint = request.getParameter("fromPoint");
+		String toPoint = request.getParameter("toPoint");
+		Debug.log(module + "::getDistance, fromPoint = " + fromPoint + ", toPoint = " + toPoint);
+		try{
+			GenericValue dis = delegator.findOne("Distance", UtilMisc.toMap("fromGeoPointId",fromPoint,"toGeoPointId",toPoint),false);
+			double d = -1;
+			if(dis != null){
+				d = dis.getDouble("distance");
+			}
+			String rs = "{\"distance\":";
+			rs += d;
+			rs += "}";
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(rs);
+			out.close();
+			
+			Debug.log(module + "::getCliets, json = " + rs);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
+	public static void getClients(HttpServletRequest request, HttpServletResponse response){
+		Delegator delegator = (Delegator)request.getAttribute("delegator");
+		try{
+			//List<GenericValue> lst = delegator.findList("Warehouse", null,null,null,null,false);
+			List<GenericValue> lst = DeliveryRequestServiceUtil.getListClients(delegator);
+			
+			String rs = "{\"clients\":[";
+			for (int i = 0; i < lst.size(); i++) {
+				GenericValue st = lst.get(i);
+				rs += "{\"id\":\"" + st.get("clientId") + "\""
+						+",\"name\":\""	+ st.get("clientName") + "\"" 
+						+ ",\"latitude\":" + st.get("latitude") + ""
+						+ ",\"longitude\":" + st.get("longitude") + ""
+						+ ",\"geoPointId\":\"" + st.get("geoPointId") + "\""
+						+ "}\n";
+				if (i < lst.size() - 1)
+					rs += ",";
+
+				
+			}
+			rs += "]}";
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(rs);
+			out.close();
+			
+			Debug.log(module + "::getCliets, json = " + rs);
+
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		
+	}
+
+	public static void getClientRequests(HttpServletRequest request, HttpServletResponse response){
+		Delegator delegator = (Delegator)request.getAttribute("delegator");
+		try{
+			//List<GenericValue> lst = delegator.findList("Warehouse", null,null,null,null,false);
+			List<Map<String, Object>> lst = DeliveryRequestServiceUtil.getListClientRequests(delegator);
+			
+			String rs = "{\"clients\":[";
+			for (int i = 0; i < lst.size(); i++) {
+				Map<String, Object> st = lst.get(i);
+				rs += "{\"id\":\"" + st.get("clientId") + "\""
+						+",\"name\":\""	+ st.get("clientName") + "\"" 
+						+ ",\"latitude\":" + st.get("latitude") + ""
+						+ ",\"longitude\":" + st.get("longitude") + ""
+						+ ",\"hasRequest\":\"" + st.get("hasRequest") + "\""
+						+ "}\n";
+				if (i < lst.size() - 1)
+					rs += ",";
+
+				
+			}
+			rs += "]}";
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(rs);
+			out.close();
+			
+			Debug.log(module + "::getCliets, json = " + rs);
+
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		
+	}
+
 	public static void getWarehouses(HttpServletRequest request, HttpServletResponse response){
 		try{
 			Delegator delegator = (Delegator)request.getAttribute("delegator");
@@ -249,6 +434,7 @@ public class DeliveryRequestService {
 						+",\"name\":\""	+ st.get("warehouseName") + "\"" 
 						+ ",\"latitude\":" + st.get("latitude") + ""
 						+ ",\"longitude\":" + st.get("longitude") + ""
+						+ ",\"geoPointId\":\"" + st.get("geoPointId") + "\""
 						+ "}\n";
 				if (i < lst.size() - 1)
 					rs += ",";
@@ -290,10 +476,11 @@ public class DeliveryRequestService {
 			String rs = "{\"deliveryrequests\":[";
 			for (int i = 0; i < lst.size(); i++) {
 				GenericValue st = lst.get(i);
-				rs += "{\"id\":\"" + st.get("warehouseId") + "\""
+				rs += "{\"id\":\"" + st.get("deliveryOrderId") + "\""
 						+",\"quantity\":\""	+ st.get("quantity") + "\"" 
 						+ ",\"latitude\":" + st.get("latitude") + ""
 						+ ",\"longitude\":" + st.get("longitude") + ""
+						+ ",\"geoPointId\":\"" + st.get("geoPointId") + "\""
 						+ "}\n";
 				if (i < lst.size() - 1)
 					rs += ",";

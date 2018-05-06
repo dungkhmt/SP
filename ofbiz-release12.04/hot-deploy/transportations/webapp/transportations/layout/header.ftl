@@ -30,7 +30,7 @@
 			window.entrypoint = window.location.origin + "<@ofbizUrl>/</@ofbizUrl>";
 		</script>
 		
-		<title>BKEUNIV</title>
+		<title>SP</title>
 	</head>
 <body>
 	<div id="body" style="height: 95%;margin-top:40px;width:100%; background-color: #fff;display: flex;flex: 1 1 0%;overflow-y: hidden;overflow-x: scroll;">

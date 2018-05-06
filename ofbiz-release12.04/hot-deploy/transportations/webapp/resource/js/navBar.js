@@ -3,7 +3,7 @@ $(document).ready(function(){
 });
 
 function logout() {
-	window.location = "/bkeuniv/control/logout";
+	window.location = "/transportations/control/logout";
 }
 
 function goto(url) {

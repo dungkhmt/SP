@@ -29,10 +29,6 @@
     </request-map>
 
 
-    <request-map uri="vehicle-scheduling-for-deliverying">
-	    <security https="true" auth="true"/>
-	    <response name="success" type="view" value="view-vehicle-scheduling-for-deliverying"/>
-    </request-map>
 
     <request-map uri="enable-security-group-user">
 	    <security https="true" auth="true"/>
@@ -104,7 +100,7 @@
     </request-map>    
     
    
-   <view-map name="view-vehicle-scheduling-for-deliverying" type="screen" page="component://transportations/widget/TransportationsScreens.xml#VehicleSchedulingForDeliverying"/>
+
    
     
    <view-map name="view-create-security-group" type="screen" page="component://transportations/widget/TransportationsScreens.xml#pageCreateSecurityGroup"/>
