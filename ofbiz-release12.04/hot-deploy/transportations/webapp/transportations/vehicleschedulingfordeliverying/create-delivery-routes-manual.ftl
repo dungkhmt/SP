@@ -62,7 +62,8 @@
 
 <div id="map" class="col-lg-10"></div>
 
-<div class="col-lg-2">
+<div class="col-lg-4">
+	<!--
     <div class="form-group">
          <label>Nhap thong tin</label>
          <input id="quantity" class="form-control" placeholder="Luong hang">
@@ -93,12 +94,14 @@
                 </div>
 				<input type="hidden" id="lateDateTime" value="" /><br/>
     </div>
-            
+    
+    <button type="button" class="btn btn-primary" onclick="computeRoutes()">Lap lo trinh</button>                
+    -->
     
 	<div id="info">
 	</div>
    	
-   	<button type="button" class="btn btn-primary" onclick="computeRoutes()">Lap lo trinh</button>
+   	
 
 
 </div>
@@ -137,6 +140,8 @@ var lastStartPoint;
 var segments = [];
 var lengths = [];
 var loads = [];
+var selectRoute;
+
 var currentSelectWarehouse;
 
 $(document).ready(function(){
@@ -164,17 +169,42 @@ function initMap(){
 	loadDeliveryRequest();
 
 }	
+function showInfo(){
+	var html = '<table border="1">';
+	html = html + '<tr>';
+	html = html + '<td>' + 'Route' + '</td>';
+	html = html + '<td>' + 'Warehouse' + '</td>';
+	html = html + '<td>' + 'Distance' + '</td>';
+	html = html + '<td>' + 'Load' + '</td>';
+	html = html + '</tr>';
+					
+				for(i = 0; i < routes.length; i++){
+					var color = "white";
+					if(selectRoute == routes[i]) color = "lightgray";
+									
+					html = html + '<tr bgcolor="' + color + '">';
+					html = html + '<td>' + routes[i].ID + '</td>';
+					html = html + '<td>' + routes[i].warehouse.ID + '</td>';
+					html = html + '<td>' + parseFloat(routes[i].routeLength).toFixed(2) + '</td>';
+					html = html + '<td>' + routes[i].load + '</td>';
+					html = html + '</tr>';
+				}
+				html = html + '</table>';
+				document.getElementById("info").innerHTML = html;
+}
 
 function extendRoute(p){
-	var s = currentSelectWarehouse.route[currentSelectWarehouse.route.length-1];
-	
-	currentSelectWarehouse.route.push(p);
-	
+	//var s = currentSelectWarehouse.route[currentSelectWarehouse.route.length-1];
+	//currentSelectWarehouse.route.push(p);
+	var s = selectRoute.route[selectRoute.route.length-1];
+	selectRoute.route.push(p);
+		
 	var list_points = [s.position,p.position];
 	var path = new google.maps.Polyline({
 						fromPoint: s,
 						toPoint: p,
 						path: list_points,
+						route: selectRoute,
 						geodisc: true,
 						strokeColor: '#FF0000',
 						strokeWeight: 2
@@ -188,19 +218,13 @@ function extendRoute(p){
 			success: function(rs){
 				console.log(rs);
 				var l = rs.distance;
-				console.log('before',l,currentSelectWarehouse.ID,currentSelectWarehouse.routeLength);
-				currentSelectWarehouse.routeLength = Number(currentSelectWarehouse.routeLength) + Number(l);
-				console.log('after',l,currentSelectWarehouse.ID,currentSelectWarehouse.routeLength);
+				//console.log('before',l,currentSelectWarehouse.ID,currentSelectWarehouse.routeLength);
+				//currentSelectWarehouse.routeLength = Number(currentSelectWarehouse.routeLength) + Number(l);
+				//console.log('after',l,currentSelectWarehouse.ID,currentSelectWarehouse.routeLength);
+				selectRoute.routeLength = Number(selectRoute.routeLength) + Number(l);
+				selectRoute.load = Number(selectRoute.load) + Number(p.quantity);
 				
-				var html = '<table>';
-				for(i = 0; i < warehouses.length; i++){
-					html = html + '<tr>';
-					html = html + '<td>' + warehouses[i].ID + '</td>';
-					html = html + '<td>' + warehouses[i].routeLength + '</td>';
-					html = html + '</tr>';
-				}
-				html = html + '</table>';
-				document.getElementById("info").innerHTML = html;
+				showInfo();
 	
 			}
 		
@@ -208,11 +232,15 @@ function extendRoute(p){
 	
 					
 	google.maps.event.addListener(path,'click',function(){
+		selectRoute = path.route;
+		showInfo();
+		/*
 		alert(path.fromPoint.position + ' --> ' + path.toPoint.position);
 		path.setMap(null);
 		var idx = segments.indexOf(path);
 		if(idx > -1)
 			segments.splice(idx,1);
+		*/
 	});
 	
 	segments.push(path);				
@@ -273,7 +301,15 @@ function addWarehouseMarker(wh){
     					//alert('right-click ' + marker.position + ', ID = ' + marker.ID);
     					lastStartPoint = marker;	
     					currentSelectWarehouse = marker;
-    					document.getElementById("warehouse").value = currentSelectWarehouse.ID;
+    					//document.getElementById("warehouse").value = currentSelectWarehouse.ID;
+    					selectRoute = new Object();
+    					selectRoute.route = [];
+    					selectRoute.route.push(marker);
+    					selectRoute.routeLength = 0;
+    					selectRoute.load = 0;
+    					selectRoute.warehouse = marker;
+    					selectRoute.ID = routes.length;
+    					routes.push(selectRoute);
   					});
 					
 		 			var point = new Object();
@@ -291,6 +327,7 @@ function addClientMarker(client){
 						'map':map,
 						'position': position,
 						'geopointid': client.geoPointId,
+						'quantity': client.quantity,
 						'visible': true,
 						'icon': img,
 						'ID': ID
