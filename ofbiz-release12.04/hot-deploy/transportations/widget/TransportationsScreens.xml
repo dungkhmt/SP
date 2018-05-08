@@ -90,6 +90,36 @@
 		</section>
 	</screen>
 
+	<screen name="PickupDeliveryRequestManagement">
+		<section>
+			<actions>
+				
+				<property-map resource="TransportationsUiLabels.xml" map-name="uiLabel" global="true"/>
+				
+				<service service-name="getWarehouses" result-map="resultWarehouses">
+				</service>
+				
+			</actions>
+			<widgets>
+				<decorator-screen name="transportations-global-decorator"
+					location="component://transportations/widget/CommonScreens.xml">
+					<decorator-section name="body">
+
+						<platform-specific>
+							<html>
+								<html-template location="component://transportations/webapp/transportations/vehicleschedulingfordeliverying/pickup-delivery-request-management.ftl" />
+							<!-- 
+								<html-template location="component://transportations/webapp/transportations/vehicleschedulingfordeliverying/forms.ftl" />
+							 -->
+							</html>
+						</platform-specific>
+
+					</decorator-section>
+				</decorator-screen>
+			</widgets>
+		</section>
+	</screen>
+
 	<screen name="ListWarehouse">
 		<section>
 			<actions>

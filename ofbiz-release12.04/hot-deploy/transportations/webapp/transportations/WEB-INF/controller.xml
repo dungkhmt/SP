@@ -47,6 +47,11 @@
 	    <response name="success" type="view" value="view-vehicle-scheduling-delivery-request-management"/>
     </request-map>
 
+    <request-map uri="vehicle-scheduling-pickup-delivery-request-management">
+	    <security https="true" auth="true"/>
+	    <response name="success" type="view" value="view-vehicle-scheduling-pickup-delivery-request-management"/>
+    </request-map>
+
     <request-map uri="vehicle-scheduling-create-delivery-routes-manual">
 	    <security https="true" auth="true"/>
 	    <response name="success" type="view" value="view-vehicle-scheduling-create-delivery-routes-manual"/>
@@ -57,6 +62,13 @@
 		<event type="java" invoke="addADeliveryRequest" 
 		path="org.ofbiz.gooddelivery.DeliveryRequestService"></event>
 		<response name="AttachementSuccess" type="view" value="ADDDELIVERYREQUESTS"/>
+	</request-map>
+
+	<request-map uri="add-a-pickup-delivery-request">
+		<security https="true" auth="true"/>
+		<event type="java" invoke="addAPickupDeliveryRequest" 
+		path="org.ofbiz.pickupdelivery.PickupDeliveryRequestService"></event>
+		<response name="AttachementSuccess" type="view" value="ADDPICKUPDELIVERYREQUESTS"/>
 	</request-map>
 
 	<request-map uri="add-a-warehouse">
@@ -99,6 +111,13 @@
 		<event type="java" invoke="getClientRequests"
 		path="org.ofbiz.gooddelivery.DeliveryRequestService"></event>
 		<response name="AttachementSuccess" type="view" value="GETCLIENTS"/>
+	</request-map>
+
+	<request-map uri="get-client-pickup-delivery-requests">
+		<security https="true" auth="true"/>
+		<event type="java" invoke="getClientPickupDeliveryRequests"
+		path="org.ofbiz.pickupdelivery.PickupDeliveryRequestService"></event>
+		<response name="AttachementSuccess" type="view" value="GETCLIENTPICKUPDELIVERYREUQESTS"/>
 	</request-map>
 
 	<request-map uri="get-delivery-requests">
@@ -191,6 +210,8 @@
    
    <view-map name="view-vehicle-scheduling-delivery-request-management" type="screen" page="component://transportations/widget/TransportationsScreens.xml#DeliveryRequestManagement"/>
     
+   <view-map name="view-vehicle-scheduling-pickup-delivery-request-management" type="screen" page="component://transportations/widget/TransportationsScreens.xml#PickupDeliveryRequestManagement"/>
+
    <view-map name="view-vehicle-scheduling-create-delivery-routes-manual" type="screen" page="component://transportations/widget/TransportationsScreens.xml#CreateDeliveryManualRoutes"/>
 	
 	

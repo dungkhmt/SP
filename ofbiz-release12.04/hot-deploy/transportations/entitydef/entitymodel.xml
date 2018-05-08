@@ -88,6 +88,49 @@
 		</view-link>
 	</view-entity>
 	
+	<entity entity-name="PickupDeliveryOrder" package-name="org.ofbiz.transportations">
+		<field name="orderId" type="id-ne"></field>
+		<field name="pickupClientId" type="id-ne"></field>
+		<field name="deliveryClientId" type="id-ne"></field>
+		<field name="quantity" type="numeric"></field>
+		<field name="fromDatePickup" type="date-time"></field>	
+		<field name="thruDatePickup" type="date-time"></field>
+		<field name="fromDateDelivery" type="date-time"></field>	
+		<field name="thruDateDelivery" type="date-time"></field>
+
+		<prim-key field="orderId"/>
+		<relation rel-entity-name="Client" type="one">
+			<key-map field-name="pickupClientId" rel-field-name="clientId"/>
+		</relation>
+		<relation rel-entity-name="Client" type="one">
+			<key-map field-name="deliveryClientId" rel-field-name="clientId"/>
+		</relation>
+		
+	</entity>
+
+	<view-entity entity-name="PickupDeliveryOrderView" package-name="org.ofbiz.transportations">
+		<member-entity entity-alias="PD" entity-name="PickupDeliveryOrder"></member-entity>
+		<member-entity entity-alias="PC" entity-name="ClientView"></member-entity>
+		<member-entity entity-alias="DC" entity-name="ClientView"></member-entity>
+		
+		<alias-all entity-alias="PD"></alias-all>
+		<alias name="pickuplatitude" field="latitude" entity-alias="PC"></alias>
+		<alias name="pickuplongitude" field="longitude" entity-alias="PC"></alias>
+		<alias name="pickupGeoPointId" field="geoPointId" entity-alias="PC"></alias>
+		<alias name="deliverylatitude" field="latitude" entity-alias="DC"></alias>
+		<alias name="deliverylongitude" field="longitude" entity-alias="DC"></alias>
+		<alias name="deliveryGeoPointId" field="geoPointId" entity-alias="DC"></alias>
+		
+		<view-link rel-entity-alias="PC" entity-alias="PD">
+			<key-map field-name="pickupClientId" rel-field-name="clientId"/>
+		</view-link>
+		<view-link rel-entity-alias="DC" entity-alias="PD">
+			<key-map field-name="deliveryClientId" rel-field-name="clientId"/>
+		</view-link>
+		
+	</view-entity>
+	
+	
 	<entity entity-name="Distance" package-name="org.ofbiz.transportations">
 		<field name="fromGeoPointId" type="id-ne"></field>
 		<field name="toGeoPointId" type="id-ne"></field>
@@ -108,6 +151,9 @@
 		<field name="vehicleCode" type="name"></field>
 		<field name="description" type="value"></field>
 		<field name="weight" type="value"></field>
+		<field name="width" type="numberic"></field>
+		<field name="height" type="numberic"></field>
+		<field name="long" type="numberic"></field>
 		<prim-key field="vehicleId"/>
 	</entity>
 	
