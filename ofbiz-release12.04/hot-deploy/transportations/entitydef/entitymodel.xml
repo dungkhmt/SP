@@ -148,12 +148,15 @@
 	</entity>	
 	<entity entity-name="Vehicle" package-name="org.ofbiz.transportations">
 		<field name="vehicleId" type="id-ne"></field>
-		<field name="vehicleCode" type="name"></field>
+		<field name="name" type="name"></field>
 		<field name="description" type="value"></field>
-		<field name="weight" type="value"></field>
-		<field name="width" type="numberic"></field>
-		<field name="height" type="numberic"></field>
-		<field name="long" type="numberic"></field>
+		<field name="weight" type="floating-point"></field>
+		<field name="width" type="floating-point"></field>
+		<field name="height" type="floating-point"></field>
+		<field name="length" type="floating-point"></field>
+		<field name="startWorkingTime" type="date-time"></field>
+		<field name="endWorkingTime" type="date-time"></field>
+		<field name="warehouseId" type="id-ne"></field>
 		<prim-key field="vehicleId"/>
 	</entity>
 	

@@ -59,6 +59,35 @@
 		</section>
 	</screen>
 	
+	<screen name="VehicleSchedulingForPickupDeliverying">
+		<section>
+			<actions>
+				
+				<property-map resource="TransportationsUiLabels.xml" map-name="uiLabel" global="true"/>
+				
+				<service service-name="getWarehouses" result-map="resultWarehouses">
+				</service>
+				
+			</actions>
+			<widgets>
+				<decorator-screen name="transportations-global-decorator"
+					location="component://transportations/widget/CommonScreens.xml">
+					<decorator-section name="body">
+
+						<platform-specific>
+							<html>
+								<html-template location="component://transportations/webapp/transportations/vehicleschedulingfordeliverying/vehicle-scheduling-for-pickup-deliverying.ftl" />
+							<!-- 
+								<html-template location="component://transportations/webapp/transportations/vehicleschedulingfordeliverying/forms.ftl" />
+							 -->
+							</html>
+						</platform-specific>
+
+					</decorator-section>
+				</decorator-screen>
+			</widgets>
+		</section>
+	</screen>
 
 	<screen name="DeliveryRequestManagement">
 		<section>
@@ -168,6 +197,36 @@
 						<platform-specific>
 							<html>
 								<html-template location="component://transportations/webapp/transportations/vehicleschedulingfordeliverying/list-client.ftl" />
+							<!-- 
+								<html-template location="component://transportations/webapp/transportations/vehicleschedulingfordeliverying/forms.ftl" />
+							 -->
+							</html>
+						</platform-specific>
+
+					</decorator-section>
+				</decorator-screen>
+			</widgets>
+		</section>
+	</screen>
+
+	<screen name="ListVehicle">
+		<section>
+			<actions>
+				
+				<property-map resource="TransportationsUiLabels.xml" map-name="uiLabel" global="true"/>
+				
+				<service service-name="getWarehouses" result-map="resultWarehouses">
+				</service>
+				
+			</actions>
+			<widgets>
+				<decorator-screen name="transportations-global-decorator"
+					location="component://transportations/widget/CommonScreens.xml">
+					<decorator-section name="body">
+
+						<platform-specific>
+							<html>
+								<html-template location="component://transportations/webapp/transportations/vehicleschedulingfordeliverying/list-vehicle.ftl" />
 							<!-- 
 								<html-template location="component://transportations/webapp/transportations/vehicleschedulingfordeliverying/forms.ftl" />
 							 -->

@@ -37,9 +37,19 @@
 	    <response name="success" type="view" value="view-list-client"/>
     </request-map>
 
+    <request-map uri="list-vehicle">
+	    <security https="true" auth="true"/>
+	    <response name="success" type="view" value="view-list-vehicle"/>
+    </request-map>
+
     <request-map uri="vehicle-scheduling-for-deliverying">
 	    <security https="true" auth="true"/>
 	    <response name="success" type="view" value="view-vehicle-scheduling-for-deliverying"/>
+    </request-map>
+
+    <request-map uri="vehicle-scheduling-for-pickup-delivery">
+	    <security https="true" auth="true"/>
+	    <response name="success" type="view" value="view-vehicle-scheduling-for-pickup-deliverying"/>
     </request-map>
 
     <request-map uri="vehicle-scheduling-delivery-request-management">
@@ -98,6 +108,12 @@
 		path="org.ofbiz.gooddelivery.DeliveryRequestService"></event>
 		<response name="AttachementSuccess" type="view" value="ADDCLIENT"/>
 	</request-map>
+	<request-map uri="add-a-vehicle">
+		<security https="true" auth="true"/>
+		<event type="java" invoke="addAVehicle" 
+		path="org.ofbiz.gooddelivery.DeliveryRequestService"></event>
+		<response name="AttachementSuccess" type="view" value="ADDVEHICLE"/>
+	</request-map>
 
 	<request-map uri="get-client">
 		<security https="true" auth="true"/>
@@ -134,6 +150,13 @@
 		<response name="AttachementSuccess" type="view" value="COMPUTEDELIVERYROUTES"/>
 	</request-map>
     
+	<request-map uri="compute-pickup-delivery-routes">
+		<security https="true" auth="true"/>
+		<event type="java" invoke="computePickupDeliveryRoutes"
+		path="org.ofbiz.pickupdelivery.PickupDeliveryRequestService"></event>
+		<response name="AttachementSuccess" type="view" value="COMPUTEPICKUPDELIVERYROUTES"/>
+	</request-map>
+
     <request-map uri="routes-management">
 		<security https="true" auth="true"/>
         <response name="success" type="view" value="RoutesView"/>
@@ -205,9 +228,12 @@
 	
 	<view-map name="view-list-warehouse" type="screen" page="component://transportations/widget/TransportationsScreens.xml#ListWarehouse"/>
 	<view-map name="view-list-client" type="screen" page="component://transportations/widget/TransportationsScreens.xml#ListClient"/>
+	<view-map name="view-list-vehicle" type="screen" page="component://transportations/widget/TransportationsScreens.xml#ListVehicle"/>
 	
 	<view-map name="view-vehicle-scheduling-for-deliverying" type="screen" page="component://transportations/widget/TransportationsScreens.xml#VehicleSchedulingForDeliverying"/>
    
+	<view-map name="view-vehicle-scheduling-for-pickup-deliverying" type="screen" page="component://transportations/widget/TransportationsScreens.xml#VehicleSchedulingForPickupDeliverying"/>
+
    <view-map name="view-vehicle-scheduling-delivery-request-management" type="screen" page="component://transportations/widget/TransportationsScreens.xml#DeliveryRequestManagement"/>
     
    <view-map name="view-vehicle-scheduling-pickup-delivery-request-management" type="screen" page="component://transportations/widget/TransportationsScreens.xml#PickupDeliveryRequestManagement"/>

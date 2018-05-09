@@ -260,6 +260,62 @@ public class DeliveryRequestService {
 		}
 	}
 
+	public static void addAVehicle(HttpServletRequest request, 
+			HttpServletResponse response){
+		try{
+			Delegator delegator = (Delegator) request.getAttribute("delegator");
+			String warehouseId = (String)request.getParameter("warehouseId");
+			String name = (String)request.getParameter("name");
+			String s_height = (String)request.getParameter("height");
+			String s_length = (String)request.getParameter("length");
+			String s_weight = (String)request.getParameter("weight");
+			String s_width = (String)request.getParameter("width");
+			String s_startWorkingTime = (String)request.getParameter("startWorkingTime");
+			String s_endWorkingTime = (String)request.getParameter("endWorkingTime");
+
+			Debug.log(module + "::addAVehicle, warehouseId = " + warehouseId + ", s_height = " + s_height +
+					", s_length = " + s_length + ", s_weight= " + s_weight + ", s_width = " + s_width
+					+ ", s_startWorkingTime = " + s_startWorkingTime + ", s_endWorkingTime = " + s_endWorkingTime);
+			
+			double height = Double.valueOf(s_height);
+			double weight = Double.valueOf(s_weight);
+			double length = Double.valueOf(s_length);
+			double width = Double.valueOf(s_width);
+			
+			SimpleDateFormat dateFormat = new SimpleDateFormat(
+					"yyyy-MM-dd hh:mm:ss");
+			Date parsedDate = dateFormat.parse(s_startWorkingTime);
+			Timestamp startWorkingTime = new java.sql.Timestamp(
+					parsedDate.getTime());
+
+			parsedDate = dateFormat.parse(s_endWorkingTime);
+			Timestamp endWorkingTime = new java.sql.Timestamp(
+					parsedDate.getTime());
+
+			
+				
+				
+				
+				GenericValue v = delegator.makeValue("Vehicle");
+				String vehicleId = delegator.getNextSeqId("Vehicle");
+				v.put("vehicleId", vehicleId);
+				v.put("warehouseId", warehouseId);
+				v.put("name", name);
+				v.put("height", height);
+				v.put("length", length);
+				v.put("width", width);
+				v.put("weight", weight);
+				v.put("startWorkingTime", startWorkingTime);
+				v.put("endWorkingTime", endWorkingTime);
+				
+				
+				delegator.create(v);
+				
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
 	
 	public static void addADeliveryRequest(HttpServletRequest request, 
 
