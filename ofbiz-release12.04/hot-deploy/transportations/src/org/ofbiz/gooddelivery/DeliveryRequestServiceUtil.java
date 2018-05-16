@@ -129,6 +129,24 @@ public class DeliveryRequestServiceUtil {
 		return null;
 	}
 
+	public static List<GenericValue> getListVehicleOfWarehouse(Delegator delegator, String warehouseId) {
+		try {
+			
+			List<EntityCondition> conds = FastList.newInstance();
+			conds.add(EntityCondition.makeCondition("warehouseId",
+					EntityOperator.EQUALS, warehouseId));
+
+			List<GenericValue> lst = delegator.findList("Vehicle",
+					EntityCondition.makeCondition(conds), null, null, null,
+					false);
+			return lst;
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
 	public static List<GenericValue> getListClients(Delegator delegator) {
 		try {
 			List<EntityCondition> conds = FastList.newInstance();

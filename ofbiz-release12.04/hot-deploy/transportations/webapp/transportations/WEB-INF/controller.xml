@@ -95,6 +95,13 @@
 		<response name="AttachementSuccess" type="view" value="GETWAREHOUSES"/>
 	</request-map>
 	
+	<request-map uri="get-warehouses-vehicles">
+		<security https="true" auth="true"/>
+		<event type="java" invoke="getWarehouseVehicles"
+		path="org.ofbiz.gooddelivery.DeliveryRequestService"></event>
+		<response name="AttachementSuccess" type="view" value="GETWAREHOUSEVEHICLES"/>
+	</request-map>
+
 	<request-map uri="get-distance">
 		<security https="true" auth="true"/>
 		<event type="java" invoke="getDistance"

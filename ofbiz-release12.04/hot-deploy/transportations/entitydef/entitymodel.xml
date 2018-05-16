@@ -105,7 +105,19 @@
 		<relation rel-entity-name="Client" type="one">
 			<key-map field-name="deliveryClientId" rel-field-name="clientId"/>
 		</relation>
-		
+	</entity>
+	
+	<entity entity-name="PickupDeliveryOrderItem" package-name="org.ofbiz.transportations">
+		<field name="itemId" type="id-ne"></field>
+		<field name="orderId" type="id-ne"></field>
+		<field name="weight" type="numeric"></field>
+		<field name="height" type="numeric"></field>
+		<field name="width" type="numeric"></field>
+		<field name="length" type="numeric"></field>
+		<prim-key field="itemId"/>
+		<relation rel-entity-name="PickupDeliveryOrder" type="one">
+			<key-map field-name="orderId"/>
+		</relation>
 	</entity>
 
 	<view-entity entity-name="PickupDeliveryOrderView" package-name="org.ofbiz.transportations">

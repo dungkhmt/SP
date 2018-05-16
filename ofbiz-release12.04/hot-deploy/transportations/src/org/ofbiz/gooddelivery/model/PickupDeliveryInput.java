@@ -1,9 +1,30 @@
 package org.ofbiz.gooddelivery.model;
 
+
+
 public class PickupDeliveryInput {
 	private PickupDeliveryRequest[] requests;
 	private Vehicle[] vehicles;
+	private DistanceElement[] distances;
 	private ConfigParams params;
+	
+	
+	public PickupDeliveryInput(PickupDeliveryRequest[] requests,
+			Vehicle[] vehicles,
+			org.ofbiz.gooddelivery.model.DistanceElement[] distances,
+			ConfigParams params) {
+		super();
+		this.requests = requests;
+		this.vehicles = vehicles;
+		this.distances = distances;
+		this.params = params;
+	}
+	public DistanceElement[] getDistances() {
+		return distances;
+	}
+	public void setDistances(DistanceElement[] distances) {
+		this.distances = distances;
+	}
 	public PickupDeliveryRequest[] getRequests() {
 		return requests;
 	}

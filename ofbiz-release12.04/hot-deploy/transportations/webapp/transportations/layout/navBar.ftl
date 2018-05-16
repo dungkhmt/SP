@@ -13,7 +13,7 @@
 	</span>
 
 	<div class="app-name">
-		<h1 style="font-size: 1.5vw;">${pageName}</h1>
+		<h1 style="font-size: 1.5vw;">${uiLabelMap.WebAppTitle}</h1>
 	</div>
 	<div class="change-language">
 		<select id="select-language" onchange="changeLanguage()" placeholder="Select a language...">

@@ -152,9 +152,47 @@ function initMap(){
 
 }	
 
+function addWarehouse(wh){
+					var img = new google.maps.MarkerImage('/resource/transportations/image/icon/warehouse-sz-30.jpg');
+					var position = {lat:wh.latitude,lng: wh.longitude};
+					
+					var marker = new google.maps.Marker({
+						'map':map,
+						'position': position,
+						'visible': true,
+						'ID': wh.id,
+						'vehicles': wh.vehicles,
+						'icon': img
+					});
+		 			marker.addListener('click', function() {
+						document.getElementById("warehouseId").value = marker.ID;
+					});					
+					marker.addListener('rightclick', function() {
+						if(marker.vehicles.length > 0){
+						var str = '<table border="1">';
+						for(j = 0; j < marker.vehicles.length; j++){
+							str = str + '<tr>';
+							str = str + '<td>' + marker.vehicles[j].name + '</td>';
+							str = str + '<td>' + marker.vehicles[j].weight + '</td>';
+							str = str + '<td>' + marker.vehicles[j].height + '</td>';
+							str = str + '<td>' + marker.vehicles[j].width + '</td>';
+							str = str + '<td>' + marker.vehicles[j].length + '</td>';
+							str = str + '<td>' + marker.vehicles[j].startWorkingTime + '</td>';
+							str = str + '<td>' + marker.vehicles[j].endWorkingTime + '</td>';
+							str = str + '</tr>';
+						}
+						str = str + '</table>';
+						
+						var info = new google.maps.InfoWindow({content: str});
+						info.open(map,marker);
+						}
+					});					
+
+}
+
 function loadWarehouse(){
 	$.ajax({
-	url: "/transportations/control/get-warehouses",
+	url: "/transportations/control/get-warehouses-vehicles",
 			type: 'POST',
 			success: function(rs){
 				console.log(rs);
@@ -163,23 +201,7 @@ function loadWarehouse(){
 				
 				for(i = 0; i < rs.warehouses.length; i++){
 					var wh = rs.warehouses[i];
-					//var img = new google.maps.MarkerImage('/resource/transportations/image/icon/ccmarker.png');
-					var img = new google.maps.MarkerImage('/resource/transportations/image/icon/warehouse-sz-30.jpg');
-					//alert(rs.warehouses[i].id);
-					var position = {lat:wh.latitude,lng: wh.longitude};
-					//alert(position);
-					var marker = new google.maps.Marker({
-						'map':map,
-						'position': position,
-						'visible': true,
-						'ID': wh.id,
-						'icon': img
-					});
-		 			marker.addListener('click', function() {
-					document.getElementById("warehouseId").value = marker.ID;
-		
-	});					
-
+					addWarehouse(wh);
 				}
 				
 			}

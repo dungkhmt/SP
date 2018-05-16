@@ -147,8 +147,8 @@ function initMap(){
 		document.getElementById("location").value = marker.position;
 	});
 	
-	loadWarehouse();
-	loadDeliveryRequest();
+	//loadWarehouse();
+	//loadDeliveryRequest();
 
 }	
 function loadWarehouse(){

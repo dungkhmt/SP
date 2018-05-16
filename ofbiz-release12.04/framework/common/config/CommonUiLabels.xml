@@ -18,6 +18,10 @@
     under the License.
 -->
 <resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<property key="WebAppTitle">
+        <value xml:lang="vi">Lập lộ trình vận tải</value>
+        <value xml:lang="en">Transportation Scheduling</value>
+    </property>
     <property key="AP">
         <value xml:lang="de">Kreditoren</value>
         <value xml:lang="en">AP</value>

@@ -10,7 +10,7 @@
 <html lang="${docLangAttr}" dir="${langDir}" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>H&#x1EC7; th&#x1ED1;ng qu&#x1EA3;n l&#xFD; khoa h&#x1ECD;c c&#xF4;ng ngh&#x1EC7;</title>
+    <title>Transportation scheduling system</title>
     
     <#if layoutSettings.shortcutIcon?has_content>
       <#assign shortcutIcon = layoutSettings.shortcutIcon/>
@@ -81,7 +81,7 @@
 <body>
   <div class="nav">
 	<div class="app-name">
-		<h1>H&#x1EC7; th&#x1ED1;ng qu&#x1EA3;n l&#xFD; khoa h&#x1ECD;c c&#xF4;ng ngh&#x1EC7;</h1>
+		<h1>Transportation Scheduling System</h1>
 	</div>
 	
 	<div class="action">

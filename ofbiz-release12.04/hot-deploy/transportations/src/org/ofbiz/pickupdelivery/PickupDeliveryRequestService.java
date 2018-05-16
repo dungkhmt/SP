@@ -29,6 +29,7 @@ import org.ofbiz.gooddelivery.DeliveryRequestServiceUtil;
 import org.ofbiz.gooddelivery.model.ConfigParams;
 import org.ofbiz.gooddelivery.model.Depot;
 import org.ofbiz.gooddelivery.model.DistanceElement;
+import org.ofbiz.gooddelivery.model.Item;
 import org.ofbiz.gooddelivery.model.PickupDeliveryInput;
 import org.ofbiz.gooddelivery.model.PickupDeliveryRequest;
 import org.ofbiz.gooddelivery.model.Request;
@@ -44,16 +45,18 @@ public class PickupDeliveryRequestService {
 	public static void computePickupDeliveryRoutes(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
+			Debug.log(module + "::computePickupDeliveryRoutes START");
+			
 			Delegator delegator = (Delegator) request.getAttribute("delegator");
-			List<GenericValue> lstWarehouses = DeliveryRequestServiceUtil
-					.getListWarehouses(delegator);
-			List<GenericValue> lstRequests = PickupDeliveryRequestServiceUtil
+			//List<GenericValue> lstWarehouses = DeliveryRequestServiceUtil
+			//		.getListWarehouses(delegator);
+			List<Map<String, Object>> lstRequests = PickupDeliveryRequestServiceUtil
 					.getListRequests(delegator);
 
 			PickupDeliveryRequest[] req = new PickupDeliveryRequest[lstRequests
 					.size()];
 			for (int i = 0; i < lstRequests.size(); i++) {
-				GenericValue r = lstRequests.get(i);
+				GenericValue r = (GenericValue)lstRequests.get(i).get("order");
 				String s_pickupLat = r.getString("pickuplatitude");
 				String s_pickupLng = r.getString("pickuplongitude");
 				String s_deliveryLat = r.getString("deliverylatitude");
@@ -62,7 +65,7 @@ public class PickupDeliveryRequestService {
 				double pickupLat = Double.valueOf(s_pickupLat);
 				double pickupLng = Double.valueOf(s_pickupLng);
 				double deliveryLat = Double.valueOf(s_deliveryLat);
-				double deliveryLng = Double.valueOf(s_deliveryLat);
+				double deliveryLng = Double.valueOf(s_deliveryLng);
 				
 				String pickupLocationCode = r.getString("pickupGeoPointId");
 				String deliveryLocationCode = r.getString("deliveryGeoPointId");
@@ -78,16 +81,29 @@ public class PickupDeliveryRequestService {
 
 				String earlyDeliveryTime = fromDateDelivery.toString();
 				String lateDeliveryTime = thruDateDelivery.toString();
-
-				req[i] = new PickupDeliveryRequest(orderId, null, pickupLocationCode, "-",
+				
+				List<GenericValue> lstItems = (List<GenericValue>)lstRequests.get(i).get("orderItems");
+				Item[] items = new Item[lstItems.size()];
+				for(int j = 0; j < items.length; j++){
+					GenericValue I = lstItems.get(j);
+					items[j] = new Item(1,1,1,"name",1,I.getLong("weight"));
+				}
+					
+				req[i] = new PickupDeliveryRequest(orderId, items, pickupLocationCode, "-",
 						 pickupLat, pickupLng, earlyPickupTime, latePickupTime,
 						 deliveryLocationCode, "-",  deliveryLat, deliveryLng, earlyDeliveryTime,
 						lateDeliveryTime);
 			}
-			ArrayList<Vehicle> lstVehicles = new ArrayList<Vehicle>();
-			Depot[] depots = new Depot[lstWarehouses.size()];
+			List<Vehicle> lstVehicles = FastList.newInstance();
+			List<EntityCondition> conds = FastList.newInstance();
+			conds.add(EntityCondition.makeCondition("warehouseId", EntityOperator.EQUALS,"00040"));
+			List<GenericValue> lstWarehouses= delegator.findList("WarehouseView", 
+					EntityCondition.makeCondition(conds), null,null,null,false);
+			
 			for (int i = 0; i < lstWarehouses.size(); i++) {
+				
 				GenericValue wh = lstWarehouses.get(i);
+				//GenericValue wh = delegator.findOne("WarehouseView",UtilMisc.toMap("warehouseId", "00040"),false);
 				String s_lat = wh.getString("latitude");
 				String s_lng = wh.getString("longitude");
 				double lat = Double.valueOf(s_lat);
@@ -95,20 +111,35 @@ public class PickupDeliveryRequestService {
 				
 				String code = wh.getString("geoPointId");
 				Debug.log(module + ":: code warehouse = " + code);	
-				Vehicle[] vehicles = new Vehicle[1];
-
-				vehicles[0] = new Vehicle(0, 0, 0, code, lat, lng, 100, code, code);
 				
-				depots[i] = new Depot(code, lat, lng, vehicles);
-
-				lstVehicles.add(vehicles[0]);
+				List<GenericValue> lstV = DeliveryRequestServiceUtil.getListVehicleOfWarehouse(delegator,wh.getString("warehouseId"));
+				Debug.log(module + ":: lstV = " + lstV.size());
+				for (int j = 0; j < lstV.size(); j++) {
+					GenericValue v = lstV.get(j);
+					long width = 0;
+					if(v.getLong("width")!=null) width = v.getLong("width");
+					long height = 0;
+					if(v.getLong("height")!=null) height = v.getLong("height");
+					long length = 0;
+					if(v.getLong("length")!=null)length = v.getLong("length");
+					double weight = v.getDouble("weight");
+					Timestamp startWorkingTime = v.getTimestamp("startWorkingTime");
+					Timestamp endWorkingTime = v.getTimestamp("endWorkingTime");
+					
+					
+					Vehicle vehicle = new Vehicle((int)width,(int)length,(int)height,code,lat,lng,lat,lng,
+							weight,code,code,startWorkingTime.toString(),endWorkingTime.toString());
+					
+					lstVehicles.add(vehicle);
+				}
+				Debug.log(module + "::lstVehicles = " + lstVehicles.size());
+				
 			}
-
+			
 			Vehicle[] vehicles = new Vehicle[lstVehicles.size()];
-			for (int i = 0; i < lstWarehouses.size(); i++) {
+			for(int i = 0; i < lstVehicles.size(); i++)
 				vehicles[i] = lstVehicles.get(i);
-			}
-
+			
 			HashSet<String> locationCodes = new HashSet<String>();
 
 			for (int i = 0; i < req.length; i++) {
@@ -116,7 +147,7 @@ public class PickupDeliveryRequestService {
 				String toCode = req[i].getDeliveryLocationCode();
 				locationCodes.add(fromCode);
 				locationCodes.add(toCode);
-				Debug.log(module + "::req[" + i + ", fromCode = " + fromCode + ", toCode = " + toCode);
+				Debug.log(module + "::req[" + i + "], fromCode = " + fromCode + ", toCode = " + toCode);
 			}
 			for (int i = 0; i < vehicles.length; i++) {
 				Vehicle v = vehicles[i];
@@ -127,10 +158,10 @@ public class PickupDeliveryRequestService {
 				Debug.log(module + "::vehicle[" + i + "], fromCode = " + fromCode + ", toCode = " + toCode);
 			}
 			DistanceElement[] distances = new DistanceElement[locationCodes
-					.size() * (locationCodes.size() - 1)];
+					.size() * (locationCodes.size())];
 			int idx = -1;
 			for (String fromCode : locationCodes) {
-				for (String toCode : locationCodes)
+				for (String toCode : locationCodes){
 					if (!fromCode.equals(toCode)) {
 						GenericValue d = delegator.findOne("Distance", UtilMisc
 								.toMap("fromGeoPointId", fromCode,
@@ -139,10 +170,15 @@ public class PickupDeliveryRequestService {
 						distances[idx] = new DistanceElement(fromCode, toCode,
 								d.getDouble("distance"));
 
+					}else{
+						idx++;
+						distances[idx] = new DistanceElement(fromCode, toCode,
+								0);
 					}
+				}
 			}
 			ConfigParams params = new ConfigParams();
-			PickupDeliveryInput input = new PickupDeliveryInput(req, vehicles, params);
+			PickupDeliveryInput input = new PickupDeliveryInput(req, vehicles, distances, params);
 			
 			// URL url = new URL("http://localhost:8080/DailyOptAPI/basic");
 			URL url = new URL(

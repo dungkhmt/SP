@@ -76,7 +76,8 @@ public class DeliveryRequestService {
 				
 				Vehicle[] vehicles = new Vehicle[1];
 				
-				vehicles[0] = new Vehicle(0,0,0,code,lat,lng);
+				vehicles[0] = new Vehicle(0, 0, 0, code, lat, lng, lat, lng, 0, (String)wh.get("geoPointId"), 
+						(String)wh.get("geoPointId"), "2018-05-08 00:00:00", "2018-05-08 00:00:00");
 				depots[i] = new Depot(code,lat,lng,vehicles);
 				
 				lstVehicles.add(vehicles[0]);
@@ -492,6 +493,60 @@ public class DeliveryRequestService {
 						+ ",\"longitude\":" + st.get("longitude") + ""
 						+ ",\"geoPointId\":\"" + st.get("geoPointId") + "\""
 						+ "}\n";
+				if (i < lst.size() - 1)
+					rs += ",";
+
+				
+			}
+			rs += "]}";
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(rs);
+			out.close();
+			
+			Debug.log(module + "::getWarehouses, json = " + rs);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
+
+	public static void getWarehouseVehicles(HttpServletRequest request, HttpServletResponse response){
+		try{
+			Delegator delegator = (Delegator)request.getAttribute("delegator");
+			//List<GenericValue> lst = delegator.findList("Warehouse", null,null,null,null,false);
+			List<GenericValue> lst = DeliveryRequestServiceUtil.getListWarehouses(delegator);
+			
+			String rs = "{\"warehouses\":[";
+			for (int i = 0; i < lst.size(); i++) {
+				GenericValue st = lst.get(i);
+				String warehouseId = (String)st.get("warehouseId");
+				List<GenericValue> vehicles = DeliveryRequestServiceUtil.getListVehicleOfWarehouse(delegator, warehouseId);
+				
+				
+				rs += "{\"id\":\"" + warehouseId + "\""
+						+",\"name\":\""	+ st.get("warehouseName") + "\"" 
+						+ ",\"latitude\":" + st.get("latitude") + ""
+						+ ",\"longitude\":" + st.get("longitude") + ""
+						+ ",\"geoPointId\":\"" + st.get("geoPointId") + "\"";
+				rs += ",\"vehicles\":[";
+				for(int j = 0; j < vehicles.size(); j++){
+					GenericValue v = vehicles.get(j);
+					rs = rs + "{"
+							+ "\"vehicleId\":\"" + v.get("vehicleId") + "\""
+							+ ",\"name\":\"" + v.get("name") + "\""
+							+ ",\"weight\":" + v.get("weight") + ""
+							+ ",\"width\":" + v.get("width") + ""
+							+ ",\"height\":" + v.get("height") + ""
+							+ ",\"length\":" + v.get("length") + ""
+							+ ",\"startWorkingTime\":\"" + v.get("startWorkingTime") + "\""
+							+ ",\"endWorkingTime\":\"" + v.get("endWorkingTime") + "\""
+							+ "}\n";
+					if(j < vehicles.size()-1)
+						rs += ",";
+				}
+				rs += "]";
+				rs += "}\n";
 				if (i < lst.size() - 1)
 					rs += ",";
 
