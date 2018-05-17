@@ -169,6 +169,7 @@
 		<field name="startWorkingTime" type="date-time"></field>
 		<field name="endWorkingTime" type="date-time"></field>
 		<field name="warehouseId" type="id-ne"></field>
+		<field name="statusId" type="id-ne"></field>
 		<prim-key field="vehicleId"/>
 	</entity>
 	
@@ -191,4 +192,51 @@
 			<key-map field-name="vehicleId"/>
 		</relation>
 	</entity>
+	
+	<entity entity-name="Routes" package-name="org.ofbiz.transportations">
+		<field name="id" type="id-ne"></field>
+		<field name="vehicleId" type="id-ne"></field>
+		<field name="length" type="floating-point"></field>
+		<field name="description" type="very-long"></field>
+		<field name="shipperId" type="id-ne"></field>
+		<field name="date" type="value"></field>
+		<field name="customerId" type="value"></field>
+		<field name="seq" type="numeric"></field>
+		<prim-key field="id"/>
+		<relation rel-entity-name="Shippers" type="one">
+			<key-map field-name="shipperId" rel-field-name="id"/>
+		</relation>
+		<relation rel-entity-name="Vehicle" type="one">
+			<key-map field-name="vehicleId"/>
+		</relation>
+	</entity>   
+	<entity entity-name="RouteDetail" package-name="org.ofbiz.transportations">
+		<field name="routeDetailId" type="id-ne"></field>
+		<field name="routeId" type="id-ne"></field>
+		<field name="clientId" type="id-ne"></field>
+		<field name="orderId" type="id-ne"></field>
+		<field name="sequence" type="numeric"></field>
+		<field name="arrivalTime" type="date-time"></field>
+		<field name="departureTime" type="date-time"></field>
+		<field name="description" type="very-long"></field>
+		<prim-key field="routeDetailId"/>
+		<relation rel-entity-name="Routes" type="one">
+			<key-map field-name="routeId" rel-field-name="id"/>
+		</relation>
+	</entity>
+	
+	<view-entity entity-name="RouteDetailView" package-name="org.ofbiz.transportations">
+		<member-entity entity-alias="RD" entity-name="RouteDetail"></member-entity>
+		<member-entity entity-alias="R" entity-name="Routes"></member-entity>
+		<member-entity entity-alias="C" entity-name="ClientView"></member-entity>
+		<alias-all entity-alias="RD"></alias-all>
+		<alias name="clientName" entity-alias="C"></alias>
+		<alias name="vehicleId" entity-alias="R"></alias>
+		<view-link rel-entity-alias="R" entity-alias="RD">
+			<key-map field-name="routeId" rel-field-name="id"/>
+		</view-link>
+		<view-link rel-entity-alias="C" entity-alias="RD">
+			<key-map field-name="clientId"/>
+		</view-link>
+	</view-entity>
 </entitymodel>

@@ -12,9 +12,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import javolution.util.FastList;
+import javolution.util.FastSet;
 
 import org.apache.http.HttpResponse;
 import org.ofbiz.base.util.Debug;
@@ -39,6 +43,23 @@ public class DeliveryRequestService {
 	public static final String module = DeliveryRequestService.class.getName();
 	
 	
+	
+	public static Map<String, Object> getDetailRoutes(DispatchContext ctx, Map<String, ? extends Object> context){
+		Map<String, Object> retSucc = ServiceUtil.returnSuccess();
+		Delegator delegator = ctx.getDelegator();
+		try{
+			List<String> sortBy = FastList.newInstance();
+			sortBy.add("vehicleId");
+			sortBy.add("sequence");
+			List<GenericValue> lst = delegator.findList("RouteDetailView", 
+					null,null,sortBy,null,false);
+			
+			retSucc.put("detailRoutes", lst);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return retSucc;
+	}
 	public static Map<String, Object> computeUpdateAllDistanceDB(DispatchContext ctx, Map<String, ? extends Object> context){
 		Map<String, Object> retSucc = ServiceUtil.returnSuccess();
 		Delegator delegator = ctx.getDelegator();

@@ -60,17 +60,18 @@
 </table>
 -->
 
-<div id="map" class="col-lg-10"></div>
+<div id="map" class="col-lg-10">
+</div>
 
 <div class="col-lg-2">
+	
     <div class="form-group">
-         <label>Nhap thong tin</label>
-         <input id="quantity" class="form-control" placeholder="Luong hang">
+         <input id="speed" class="form-control" placeholder="Van toc trung binh (km/h)">
     </div>
     <div class="form-group">
-         <input id="location" class="form-control" placeholder="Toa do">
+         <input id="timeLimit" class="form-control" placeholder="Thoi gian tinh toan (s)">
     </div>
-    
+    <!--
     <div class="form-group">
                 <label class="control-label">Thoi gian giao som nhat</label>
                 <div class="controls input-append date form_datetime" 
@@ -93,10 +94,14 @@
                 </div>
 				<input type="hidden" id="lateDateTime" value="" /><br/>
     </div>
-            
+    -->        
     
    	
    	<button type="button" class="btn btn-primary" onclick="computeRoutes()">Lap lo trinh</button>
+   	<button type="button" class="btn btn-primary" onclick="viewDetailRoutes()">Chi tiet lo trinh</button>
+</div>
+
+<div id="info">
 </div>
 
 <script type="text/javascript">
@@ -126,6 +131,8 @@ var points;
 var warehouses;
 var routes = [];
 var resultAjax;
+var colors = ["#3399ff","#00264d","#000000","#5cd65c","#1f7a1f","#ffa64d","#cc6600","#4d2600","#ff6666","#ff0000","#990000",
+			"#ff80ff","#cc00cc"];
 $(document).ready(function(){
 	//alert('LOAD');
 	initMap();
@@ -135,6 +142,7 @@ $(document).ready(function(){
 function initMap(){
 	map = new google.maps.Map(document.getElementById('map'),Options);
 	points = [];
+	/*
 	google.maps.event.addListener(map,'click',function(event){
 		var img = new google.maps.MarkerImage('/resource/transportations/image/icon/shop-sz-10.jpg');
 		var marker = new google.maps.Marker({
@@ -146,6 +154,7 @@ function initMap(){
 		points.push(marker);
 		document.getElementById("location").value = marker.position;
 	});
+	*/
 	
 	//loadWarehouse();
 	//loadDeliveryRequest();
@@ -233,16 +242,23 @@ function addRequest(){
 }
 
 function computeRoutes(){
+		var speed = document.getElementById("speed").value;
+		var timeLimit = document.getElementById("timeLimit").value;
 		$.ajax({
 			url: "/transportations/control/compute-pickup-delivery-routes",
+			data: {"speed": speed, "timeLimit": timeLimit},
 			type: 'POST',
 			success: function(rs){
 				console.log(rs);
 				resultAjax = rs;
 				
+				var html = '<table>';
 				for(i = 0; i < rs.routes.length; i++){
 					var route = rs.routes[i].elements;
 					var aRoute = [];
+					
+					html += '<tr>';
+					html += '<td>' + rs.routes[i].vehicle.code + ',' + rs.routes[i].vehicle.weight + ',' + rs.routes[i].load + '</td>';
 					for(j = 0; j < route.length; j++){
 						//var latlng = route[j].latlng;
 						var lat = route[j].lat;
@@ -252,21 +268,38 @@ function computeRoutes(){
 						latlng.lng = lng; 
 						//alert(latlng);
 						aRoute.push(latlng);
+						if(j > 0 || j < route.length-1){
+							var img = new google.maps.MarkerImage('/resource/transportations/image/icon/shop-sz-10.jpg');
+							var position = {lat:latlng.lat, lng: latlng.lng};
+							var marker = new google.maps.Marker({
+							'map':map,
+							'position': position,
+							'visible': true,
+							'icon': img
+							});	
+						}
 					}
 					routes.push(aRoute);
 					
 					var path = new google.maps.Polyline({
 						path: aRoute,
 						geodisc: true,
-						strokeColor: '#FF0000',
+						strokeColor: colors[i],
 						strokeWeight: 2
 					});
 					path.setMap(map);
+					
+					html += '</tr>';
 				}
-				
+				html += '</table>';
+				//document.getElementById("info").innerHTML = html;
 			}
 		})
 
+}
+
+function viewDetailRoutes(){
+	window.location.href="/transportations/control/detail-delivery-routes";
 }
 
 </script>

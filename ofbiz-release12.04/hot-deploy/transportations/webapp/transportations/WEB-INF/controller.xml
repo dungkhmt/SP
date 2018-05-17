@@ -66,7 +66,12 @@
 	    <security https="true" auth="true"/>
 	    <response name="success" type="view" value="view-vehicle-scheduling-create-delivery-routes-manual"/>
     </request-map>
-   
+    
+    <request-map uri="detail-delivery-routes">
+	    <security https="true" auth="true"/>
+	    <response name="success" type="view" value="view-detail-delivery-routes"/>
+    </request-map>
+    
 	<request-map uri="add-a-delivery-request">
 		<security https="true" auth="true"/>
 		<event type="java" invoke="addADeliveryRequest" 
@@ -247,6 +252,8 @@
 
    <view-map name="view-vehicle-scheduling-create-delivery-routes-manual" type="screen" page="component://transportations/widget/TransportationsScreens.xml#CreateDeliveryManualRoutes"/>
 	
+	
+   <view-map name="view-detail-delivery-routes" type="screen" page="component://transportations/widget/TransportationsScreens.xml#DetailDeliveryRoutes"/>
 	
 	<!-- <view-map name="AttachmentError" type="ftl" page="file_attach_error.ftl"/>
 	<view-map name="AttachementException" type="ftl" page="file_attach_error.ftl"/>

@@ -32,10 +32,13 @@ import org.ofbiz.gooddelivery.model.DistanceElement;
 import org.ofbiz.gooddelivery.model.Item;
 import org.ofbiz.gooddelivery.model.PickupDeliveryInput;
 import org.ofbiz.gooddelivery.model.PickupDeliveryRequest;
+import org.ofbiz.gooddelivery.model.PickupDeliverySolution;
 import org.ofbiz.gooddelivery.model.Request;
 import org.ofbiz.gooddelivery.model.RoutingDeliveryMultiDepotInput;
+import org.ofbiz.gooddelivery.model.RoutingSolution;
 import org.ofbiz.gooddelivery.model.Vehicle;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 public class PickupDeliveryRequestService {
@@ -45,7 +48,13 @@ public class PickupDeliveryRequestService {
 	public static void computePickupDeliveryRoutes(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
-			Debug.log(module + "::computePickupDeliveryRoutes START");
+			String s_speed = request.getParameter("speed");
+			String s_timeLimit = request.getParameter("timeLimit");
+			int speed = Integer.valueOf(s_speed);
+			speed = speed*1000/3600; // convert into m/s
+			int timeLimit = Integer.valueOf(s_timeLimit);
+			
+			Debug.log(module + "::computePickupDeliveryRoutes START, speed = " + speed + ", timeLimit = " + timeLimit);
 			
 			Delegator delegator = (Delegator) request.getAttribute("delegator");
 			//List<GenericValue> lstWarehouses = DeliveryRequestServiceUtil
@@ -127,7 +136,7 @@ public class PickupDeliveryRequestService {
 					Timestamp endWorkingTime = v.getTimestamp("endWorkingTime");
 					
 					
-					Vehicle vehicle = new Vehicle((int)width,(int)length,(int)height,code,lat,lng,lat,lng,
+					Vehicle vehicle = new Vehicle((int)width,(int)length,(int)height,v.getString("name"),lat,lng,lat,lng,
 							weight,code,code,startWorkingTime.toString(),endWorkingTime.toString());
 					
 					lstVehicles.add(vehicle);
@@ -178,6 +187,9 @@ public class PickupDeliveryRequestService {
 				}
 			}
 			ConfigParams params = new ConfigParams();
+			params.setTimeLimit(timeLimit);
+			params.setAverageSpeed(speed);
+			
 			PickupDeliveryInput input = new PickupDeliveryInput(req, vehicles, distances, params);
 			
 			// URL url = new URL("http://localhost:8080/DailyOptAPI/basic");
@@ -216,6 +228,11 @@ public class PickupDeliveryRequestService {
 
 			conn.disconnect();
 
+			ObjectMapper mapper = new ObjectMapper();
+			PickupDeliverySolution sol = mapper.readValue(rs, PickupDeliverySolution.class);
+			// store routes into DB
+			PickupDeliveryRequestServiceUtil.storeRoute(sol, delegator);
+			
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			PrintWriter out = response.getWriter();

@@ -2908,15 +2908,5 @@ under the License.
     </entity>
     
 
-	<entity entity-name="Routes" package-name="????">
-		<field name="id" type="id-ne"></field>
-		<field name="shipperId" type="id-ne"></field>
-		<field name="date" type="value"></field>
-		<field name="customerId" type="value"></field>
-		<field name="seq" type="numeric"></field>
-		<prim-key field="id"/>
-		<relation rel-entity-name="Shippers" type="one">
-			<key-map field-name="shipperId" rel-field-name="id"/>
-		</relation>
-	</entity>    
+	 
 </entitymodel>

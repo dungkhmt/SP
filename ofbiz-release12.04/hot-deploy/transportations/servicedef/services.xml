@@ -21,6 +21,11 @@
     	<attribute name="listRequests" mode="OUT" type="List"></attribute>
     </service>
     
+    <service name="getDetailRoutes" engine="java"
+    	location="org.ofbiz.gooddelivery.DeliveryRequestService" invoke="getDetailRoutes">
+    	<attribute name="detailRoutes" mode="OUT" type="List"></attribute>
+    </service>
+
     <service name="computeUpdateAllDistanceDB" engine="java"
     	location="org.ofbiz.gooddelivery.DeliveryRequestService" invoke="computeUpdateAllDistanceDB">
     	
