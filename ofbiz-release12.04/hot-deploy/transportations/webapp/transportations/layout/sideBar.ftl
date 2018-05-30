@@ -6,7 +6,7 @@
 		<#if "main"?index_of(targetCurr)!= -1 || targetCurr?index_of("main")!= -1>
 			<#assign styleMain="background-color: rgba(0, 0, 0, 0.1);" />
 			<#if !titlePage??>
-				<#assign titlePage=uiLabelMap.BkEunivHomePage />
+				<#assign titlePage="HomePage" />
 			</#if>
 		<#else>
 			<#assign styleMain="" />
@@ -14,7 +14,7 @@
 		<#if "user"?index_of(targetCurr)!= -1 || targetCurr?index_of("user")!= -1>
 			<#assign styleUser="background-color: rgba(0, 0, 0, 0.1);" />
 			<#if !titlePage??>
-				<#assign titlePage=uiLabelMap.BkEunivPersonalInformation />
+				<#assign titlePage="PersonalInformation" />
 			</#if>
 		<#else>
 			<#assign styleUser="" />

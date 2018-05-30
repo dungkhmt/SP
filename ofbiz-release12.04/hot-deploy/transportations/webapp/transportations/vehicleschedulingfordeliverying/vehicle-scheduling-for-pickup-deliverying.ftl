@@ -68,9 +68,11 @@
     <div class="form-group">
          <input id="speed" class="form-control" placeholder="Van toc trung binh (km/h)">
     </div>
+    <!--
     <div class="form-group">
          <input id="timeLimit" class="form-control" placeholder="Thoi gian tinh toan (s)">
     </div>
+    -->
     <!--
     <div class="form-group">
                 <label class="control-label">Thoi gian giao som nhat</label>
@@ -243,7 +245,7 @@ function addRequest(){
 
 function computeRoutes(){
 		var speed = document.getElementById("speed").value;
-		var timeLimit = document.getElementById("timeLimit").value;
+		var timeLimit = 100;//document.getElementById("timeLimit").value;
 		$.ajax({
 			url: "/transportations/control/compute-pickup-delivery-routes",
 			data: {"speed": speed, "timeLimit": timeLimit},

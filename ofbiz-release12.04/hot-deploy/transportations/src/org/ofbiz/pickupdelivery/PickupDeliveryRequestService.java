@@ -37,6 +37,9 @@ import org.ofbiz.gooddelivery.model.Request;
 import org.ofbiz.gooddelivery.model.RoutingDeliveryMultiDepotInput;
 import org.ofbiz.gooddelivery.model.RoutingSolution;
 import org.ofbiz.gooddelivery.model.Vehicle;
+import org.ofbiz.smartlog.brenntag.model.BrennTagPickupDeliveryInput;
+import org.ofbiz.smartlog.brenntag.model.ExclusiveItem;
+import org.ofbiz.smartlog.brenntag.model.ExclusiveVehicleLocation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -95,13 +98,13 @@ public class PickupDeliveryRequestService {
 				Item[] items = new Item[lstItems.size()];
 				for(int j = 0; j < items.length; j++){
 					GenericValue I = lstItems.get(j);
-					items[j] = new Item(1,1,1,"name",1,I.getLong("weight"));
+					items[j] = new Item(1,1,1,I.getString("itemId"),I.getString("itemId"),1,I.getLong("weight"));
 				}
 					
 				req[i] = new PickupDeliveryRequest(orderId, items, pickupLocationCode, "-",
-						 pickupLat, pickupLng, earlyPickupTime, latePickupTime,
+						 pickupLat, pickupLng, earlyPickupTime, latePickupTime, 1800,
 						 deliveryLocationCode, "-",  deliveryLat, deliveryLng, earlyDeliveryTime,
-						lateDeliveryTime);
+						lateDeliveryTime,1800);
 			}
 			List<Vehicle> lstVehicles = FastList.newInstance();
 			List<EntityCondition> conds = FastList.newInstance();
@@ -137,7 +140,7 @@ public class PickupDeliveryRequestService {
 					
 					
 					Vehicle vehicle = new Vehicle((int)width,(int)length,(int)height,v.getString("name"),lat,lng,lat,lng,
-							weight,code,code,startWorkingTime.toString(),endWorkingTime.toString());
+							weight,code,code,startWorkingTime.toString(),endWorkingTime.toString(),1000000);
 					
 					lstVehicles.add(vehicle);
 				}
@@ -168,6 +171,9 @@ public class PickupDeliveryRequestService {
 			}
 			DistanceElement[] distances = new DistanceElement[locationCodes
 					.size() * (locationCodes.size())];
+			DistanceElement[] travelTime = new DistanceElement[locationCodes
+			                              					.size() * (locationCodes.size())];
+			                              			
 			int idx = -1;
 			for (String fromCode : locationCodes) {
 				for (String toCode : locationCodes){
@@ -178,7 +184,7 @@ public class PickupDeliveryRequestService {
 						idx++;
 						distances[idx] = new DistanceElement(fromCode, toCode,
 								d.getDouble("distance"));
-
+						
 					}else{
 						idx++;
 						distances[idx] = new DistanceElement(fromCode, toCode,
@@ -190,8 +196,37 @@ public class PickupDeliveryRequestService {
 			params.setTimeLimit(timeLimit);
 			params.setAverageSpeed(speed);
 			
-			PickupDeliveryInput input = new PickupDeliveryInput(req, vehicles, distances, params);
+			// exclusive items
+			ExclusiveItem[] exclusiveItems = new ExclusiveItem[2];
+			String code1 = req[0].getItems()[0].getCode();
+			String code2 = req[1].getItems()[0].getCode();
+			exclusiveItems[0]= new ExclusiveItem(code1, code2);
 			
+			code1 = req[2].getItems()[0].getCode();
+			code2 = req[3].getItems()[0].getCode();
+			exclusiveItems[1]= new ExclusiveItem(code1, code2);
+			
+			// exclusive vehicle and location
+			ExclusiveVehicleLocation[] exclusiveVehicleLocations = new ExclusiveVehicleLocation[2];
+			code1 = vehicles[0].getCode();
+			code2 = req[0].getDeliveryLocationCode();
+			exclusiveVehicleLocations[0] = new ExclusiveVehicleLocation(code1, code2);
+			
+			code1 = vehicles[1].getCode();
+			code2 = req[1].getDeliveryLocationCode();
+			exclusiveVehicleLocations[1] = new ExclusiveVehicleLocation(code1, code2);
+			
+			// external vehicles
+			Vehicle[] externalVehicles = new Vehicle[2];
+			externalVehicles[0] = vehicles[0].clone();
+			externalVehicles[1] = vehicles[0].clone();
+			
+			for(int i = 0; i < distances.length; i++){
+				travelTime[i] = new DistanceElement(distances[i].getSrcCode(), distances[i].getDestCode(), distances[i].getDistance()*1000/11);
+			}
+			//PickupDeliveryInput input = new PickupDeliveryInput(req, vehicles, distances, params);
+			BrennTagPickupDeliveryInput input = new BrennTagPickupDeliveryInput(req, vehicles, distances, 
+					params, travelTime, exclusiveItems, exclusiveVehicleLocations, externalVehicles);
 			// URL url = new URL("http://localhost:8080/DailyOptAPI/basic");
 			URL url = new URL(
 					"http://localhost:8080/DailyOptAPI/pickup-delivery");
@@ -205,7 +240,10 @@ public class PickupDeliveryRequestService {
 			String json = gson.toJson(input);
 
 			Debug.log(module + "::computePickupDeliveryRoutes, json = " + json);
-
+			PrintWriter fo = new PrintWriter("C:/tmp/beanntag.json");
+			fo.print(json);
+			fo.close();
+			
 			OutputStream os = conn.getOutputStream();
 			os.write(json.getBytes());
 			os.flush();
